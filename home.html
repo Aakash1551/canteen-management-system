@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,37 +12,37 @@
     <div class="hero">
 
       <!-- Home -->
-      <div class="box nav-item active" data-page="home">
+      <div class="box nav-item active" data-page="home" role="button" tabindex="0">
         <div class="icon1 icon"></div>
         <div class="text">Home</div>
       </div>
 
       <!-- Order -->
-      <div class="box dropdown-toggle" data-target="orderDropdown">
+      <div class="box dropdown-toggle" data-target="orderDropdown" role="button" tabindex="0" aria-expanded="false" aria-controls="orderDropdown">
         <div class="icon2 icon"></div>
         <div class="text">Order</div>
         <div class="arrow"></div>
       </div>
       <div class="dropdown-content" id="orderDropdown">
-        <div class="dropdown-item nav-item" data-page="liveOrder">Live order</div>
-        <div class="dropdown-item nav-item" data-page="preOrder">Pre-Order</div>
-        <div class="dropdown-item nav-item" data-page="history">History</div>
+        <div class="dropdown-item nav-item" data-page="liveOrder" role="button" tabindex="0">Live order</div>
+        <div class="dropdown-item nav-item" data-page="preOrder" role="button" tabindex="0">Pre-Order</div>
+        <div class="dropdown-item nav-item" data-page="history" role="button" tabindex="0">History</div>
       </div>
 
       <!-- Manage -->
-      <div class="box dropdown-toggle" data-target="manageDropdown">
+      <div class="box dropdown-toggle" data-target="manageDropdown" role="button" tabindex="0" aria-expanded="false" aria-controls="manageDropdown">
         <div class="icon3 icon"></div>
         <div class="text">Manage</div>
         <div class="arrow"></div>
       </div>
       <div class="dropdown-content" id="manageDropdown">
-        <div class="dropdown-item nav-item" data-page="preManage">Pre-Order</div>
-        <div class="dropdown-item nav-item" data-page="menu">Menu</div>
-        <div class="dropdown-item nav-item" data-page="delivery">Delivery</div>
+        <div class="dropdown-item nav-item" data-page="preManage" role="button" tabindex="0">Pre-Order</div>
+        <div class="dropdown-item nav-item" data-page="menu" role="button" tabindex="0">Menu</div>
+        <div class="dropdown-item nav-item" data-page="delivery" role="button" tabindex="0">Delivery</div>
       </div>
 
       <div class="box2">
-        <div class="box Contact">
+        <div class="box Contact nav-item" data-page="contact" role="button" tabindex="0">
           <div class="icon4 icon"></div>
           <div class="text">Contact Us</div>
         </div>
@@ -54,11 +55,10 @@
         <div class="text1" id="page-title">Home</div>
       </div>
       <div class="content-box" id="content-box">
-
       </div>
     </div>
   </div>
-
+  <div id="modal-root"></div>
   <script src="script.js"></script>
 </body>
 </html>

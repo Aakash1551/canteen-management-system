@@ -89,15 +89,16 @@ body {
   display: inline-block;
 }
 
-.icon1 { background-image: url('grid-8.svg'); }
-.icon2 { background-image: url('Union.svg'); }
-.icon3 { background-image: url('Subtract.svg'); }
-.icon4 { background-image: url('Vector.svg'); }
+.icon1 { background-image: url('icons/home-white.svg'); }
+.icon2 { background-image: url('icons/order-white.svg'); }
+.icon3 { background-image: url('icons/manage-white.svg'); }
+.icon4 { background-image: url('icons/contact-white.svg'); }
 .icon5 {
-  background-image: url('grid-9.svg');
+  background-image: url('icons/home-black.svg');
   position: relative;
   margin-left: 70px;
 }
+
 
 .text {
   font-size: 20px;
@@ -248,4 +249,76 @@ a:hover {
 
 .dropdown-arrow.open {
   transform: rotate(180deg);
+}
+
+/* MENU CATEGORY WRAPPER FULL WIDTH */
+#menuCategories {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center the cards nicely */
+}
+
+/* MENU CARD STYLING LIKE LIVE ORDER */
+.menu-card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  padding: 15px 20px;
+  margin: 10px 0;
+  width: 100%;         /* Take full width of parent */
+  max-width: 1000px;   /* Limit max size for large screens */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* MENU HEADER FLEX */
+.menu-header {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ACTION BUTTONS ROW */
+.menu-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* EDIT BUTTON SAME STYLE AS LIVE ORDER YELLOW */
+.edit-btn {
+  background-color: #FFD966;
+  color: black;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* AVAILABILITY BUTTONS COLOR */
+.availability-btn {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
+}
+
+.availability-btn.available {
+  background-color: #28a745;
+}
+
+.availability-btn.unavailable {
+  background-color: #dc3545;
+}
+
+/* CATEGORY TITLE */
+.menu-category {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 15px 0 8px 0;
+  width: 100%;
+  max-width: 1000px;
 }
