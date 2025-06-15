@@ -33,9 +33,6 @@ if (storedMenu) {
   ];
 }
 
-
-
-
 for (let i = 1; i <= 20; i++) {
   liveOrders.push({
     name: `Customer ${i}`,
@@ -51,7 +48,7 @@ for (let i = 1; i <= 20; i++) {
   });
 }
 
-// === RENDER FUNCTIONS ===
+// === RENDER LIVE ORDERS ===
 function renderLiveOrders() {
   const html = liveOrders.map(order => `
     <div class="live-order-card">
@@ -73,6 +70,7 @@ function renderLiveOrders() {
   setupDeliveredButtons('live');
 }
 
+// === RENDER PRE ORDERS ===
 function renderPreOrders() {
   const html = preOrders.map(order => `
     <div class="live-order-card">
@@ -94,6 +92,7 @@ function renderPreOrders() {
   setupDeliveredButtons('pre');
 }
 
+// === RENDER HISTORY ===
 function renderHistory() {
   const liveHtml = historyOrders.map(order => `
     <div class="live-order-card">
@@ -104,6 +103,7 @@ function renderHistory() {
       </div>
     </div>
   `).join('');
+
   const preHtml = preOrderHistory.map(order => `
     <div class="live-order-card">
       <div class="live-order-header">
@@ -113,6 +113,7 @@ function renderHistory() {
       </div>
     </div>
   `).join('');
+
   contentBox.innerHTML = `
     <div class="live-orders-container">
       <h3>Live Order History</h3>
@@ -123,37 +124,42 @@ function renderHistory() {
   `;
 }
 
+// === RENDER CONTACT PAGE ===
 function renderContactPage() {
   contentBox.innerHTML = `
     <div class="contact-container" style="padding: 30px; text-align: center;">
       <h2 style="font-size: 32px;">Contact Us</h2>
-      <p style="font-size: 18px; color: #555;">Have questions, feedback, or need assistance? Our team is here to help you!</p>
+      <p style="font-size: 18px; color: #555;">
+        Have questions, feedback, or need assistance? Our team is here to help you!
+      </p>
       <div style="display: inline-block; text-align: left; font-size: 18px; line-height: 1.6; color: #333;">
         <p><strong>Phone:</strong> +91 98765 43210</p>
         <p><strong>Email:</strong> support@example.com</p>
         <p><strong>Address:</strong> 123, Your Street, Your City, India</p>
       </div>
-      <p style="margin-top: 20px; font-size: 16px; color: #666;">We’re available 24/7. Your satisfaction is our priority!</p>
+      <p style="margin-top: 20px; font-size: 16px; color: #666;">
+        We’re available 24/7. Your satisfaction is our priority!
+      </p>
     </div>
   `;
 }
 
+// === RENDER MENU MANAGEMENT ===
 function renderMenuManagement() {
- contentBox.innerHTML = `
-  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-    <input type="text" id="menuSearch" placeholder="Search..." style="padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
-    <select id="sortMenu" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px; margin-right: 10px;">
-      <option value="">Sort</option>
-      <option value="priceAsc">Price: Low to High</option>
-      <option value="priceDesc">Price: High to Low</option>
-      <option value="timeAsc">Time: Low to High</option>
-      <option value="timeDesc">Time: High to Low</option>
-    </select>
-    <button id="addMenuBtn" style="padding: 6px 12px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">+ ADD</button>
-  </div>
-  <div id="menuCategories"></div>
-`;
-
+  contentBox.innerHTML = `
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+      <input type="text" id="menuSearch" placeholder="Search..." style="padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+      <select id="sortMenu" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px; margin-right: 10px;">
+        <option value="">Sort</option>
+        <option value="priceAsc">Price: Low to High</option>
+        <option value="priceDesc">Price: High to Low</option>
+        <option value="timeAsc">Time: Low to High</option>
+        <option value="timeDesc">Time: High to Low</option>
+      </select>
+      <button id="addMenuBtn" style="padding: 6px 12px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">+ ADD</button>
+    </div>
+    <div id="menuCategories"></div>
+  `;
 
   document.getElementById('addMenuBtn').addEventListener('click', openAddMenuModal);
   document.getElementById('menuSearch').addEventListener('input', (e) => {
@@ -161,19 +167,18 @@ function renderMenuManagement() {
   });
 
   document.getElementById('sortMenu').addEventListener('change', () => {
-  const searchValue = document.getElementById('menuSearch').value.toLowerCase();
-  renderMenuCards(searchValue);
-});
-
+    const searchValue = document.getElementById('menuSearch').value.toLowerCase();
+    renderMenuCards(searchValue);
+  });
 
   renderMenuCards('');
 }
 
+// === RENDER MENU CARDS ===
 function renderMenuCards(searchTerm) {
   const sortValue = document.getElementById('sortMenu')?.value;
 
-  // 🔹 Filter karo
-  let filteredItems = menuItems.filter((item) => {
+  let filteredItems = menuItems.filter(item => {
     return (
       !searchTerm ||
       item.name.toLowerCase().includes(searchTerm) ||
@@ -181,7 +186,6 @@ function renderMenuCards(searchTerm) {
     );
   });
 
-  // 🔹 Sort karo
   if (sortValue === 'priceAsc') {
     filteredItems.sort((a, b) => parseInt(a.price.replace('Rs.', '')) - parseInt(b.price.replace('Rs.', '')));
   } else if (sortValue === 'priceDesc') {
@@ -192,7 +196,6 @@ function renderMenuCards(searchTerm) {
     filteredItems.sort((a, b) => (b.time || 0) - (a.time || 0));
   }
 
-  // 🔹 Group banao
   const grouped = { Starter: [], "Main Course": [], Juice: [] };
   filteredItems.forEach((item, idx) => {
     if (grouped[item.category]) {
@@ -202,7 +205,6 @@ function renderMenuCards(searchTerm) {
     }
   });
 
-  // 🔹 HTML build
   let html = '';
   Object.keys(grouped).forEach(category => {
     if (grouped[category].length) {
@@ -240,7 +242,6 @@ function renderMenuCards(searchTerm) {
 
   document.getElementById('menuCategories').innerHTML = html;
 
-  // 🔹 Event handlers
   document.querySelectorAll('.edit-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -259,12 +260,12 @@ function renderMenuCards(searchTerm) {
   });
 
   document.querySelectorAll('.delete-btn').forEach(btn => {
-  btn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const index = btn.dataset.index;
-    showDeleteConfirm(index, searchTerm);
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const index = btn.dataset.index;
+      showDeleteConfirm(index, searchTerm);
+    });
   });
-});
 
   document.querySelectorAll('.dropdown-arrow').forEach(arrow => {
     arrow.addEventListener('click', () => {
@@ -275,7 +276,6 @@ function renderMenuCards(searchTerm) {
     });
   });
 }
-
 
 // === MODAL FUNCTIONS ===
 function openAddMenuModal() {
@@ -310,33 +310,7 @@ function openAddMenuModal() {
   `;
 }
 
-function closeMenuModal() {
-  document.getElementById('modal-root').innerHTML = '';
-}
-
-function saveMenuItem() {
-  const name = document.getElementById('menuName').value;
-  const price = "Rs." + document.getElementById('menuPrice').value;
-  const desc = document.getElementById('menuDesc').value;
-  const time = document.getElementById('menuTime').value;
-  const categoryInput = document.querySelector('input[name="category"]:checked');
-  const category = categoryInput ? categoryInput.value : "Starter";
-
-  menuItems.push({
-    name,
-    price,
-    description: desc,
-    time,
-    category,
-    available: true
-  });
-
-  closeMenuModal();
-  renderMenuManagement();
-  saveMenuToStorage();
-}
-
-  function openEditMenuModal(index) {
+function openEditMenuModal(index) {
   const item = menuItems[index];
 
   document.getElementById('modal-root').innerHTML = `
@@ -371,6 +345,32 @@ function saveMenuItem() {
 }
 
 
+function closeMenuModal() {
+  document.getElementById('modal-root').innerHTML = '';
+}
+
+function saveMenuItem() {
+  const name = document.getElementById('menuName').value;
+  const price = "Rs." + document.getElementById('menuPrice').value;
+  const desc = document.getElementById('menuDesc').value;
+  const time = document.getElementById('menuTime').value;
+  const categoryInput = document.querySelector('input[name="category"]:checked');
+  const category = categoryInput ? categoryInput.value : "Starter";
+
+  menuItems.push({
+    name,
+    price,
+    description: desc,
+    time,
+    category,
+    available: true
+  });
+
+  closeMenuModal();
+  renderMenuManagement();
+  saveMenuToStorage();
+}
+
 function saveEditedMenuItem(index) {
   const name = document.getElementById('menuName').value;
   const price = "Rs." + document.getElementById('menuPrice').value;
@@ -393,7 +393,7 @@ function saveEditedMenuItem(index) {
   saveMenuToStorage();
 }
 
-// === HELPERS ===
+// === HELPER FUNCTIONS ===
 function setupOrderDropdowns() {
   document.querySelectorAll('.dropdown-arrow').forEach(arrow => {
     arrow.addEventListener('click', () => {
@@ -448,8 +448,7 @@ function saveMenuToStorage() {
   localStorage.setItem('menuItems', JSON.stringify(menuItems));
 }
 
-
-// === NAV CLICK HANDLER ===
+// === NAVIGATION CLICK HANDLER ===
 const icons = {
   home: 'icons/home-black.svg',
   liveOrder: 'icons/order-black.svg',
@@ -475,10 +474,17 @@ document.querySelectorAll('.nav-item').forEach(item => {
     else if (page === 'contact') renderContactPage();
     else contentBox.innerHTML = `<h2>${item.textContent.trim()} Page</h2>`;
 
-    pageTitle.textContent = (page === 'preManage' || page === 'menu' || page === 'delivery') ? `${item.textContent.trim()} Management` : item.textContent.trim();
-    if (icons[page]) iconBox.style.backgroundImage = `url('${icons[page]}')`;
+    pageTitle.textContent = (page === 'preManage' || page === 'menu' || page === 'delivery') 
+      ? `${item.textContent.trim()} Management` 
+      : item.textContent.trim();
+
+    if (icons[page]) {
+      iconBox.style.backgroundImage = `url('${icons[page]}')`;
+    }
+
     document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
     item.classList.add('active');
+
     if (page === 'home' || page === 'contact') {
       contentBox.style.background = '#fff';
       contentBox.style.boxShadow = '0 2px 4px rgba(0,0,0,0.3)';
@@ -489,7 +495,7 @@ document.querySelectorAll('.nav-item').forEach(item => {
   });
 });
 
-// === Accessibility key handlers ===
+// === ACCESSIBILITY KEY HANDLER ===
 document.querySelectorAll('.dropdown-toggle, .nav-item').forEach(el => {
   el.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
