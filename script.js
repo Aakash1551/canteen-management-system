@@ -15,16 +15,25 @@ let liveOrders = [];
 let historyOrders = [];
 let preOrders = [];
 let preOrderHistory = [];
-let menuItems = [
-  { name: "Veg Burger", price: "Rs.120", available: true, category: "Starter" },
-  { name: "Paneer Pizza", price: "Rs.250", available: false, category: "Starter" },
-  { name: "French Fries", price: "Rs.80", available: true, category: "Starter" },
-  { name: "Cheese Sandwich", price: "Rs.150", available: true, category: "Main Course" },
-  { name: "Cold Coffee", price: "Rs.90", available: false, category: "Juice" },
-  { name: "Chicken Roll", price: "Rs.180", available: true, category: "Main Course" },
-  { name: "Mango Shake", price: "Rs.110", available: true, category: "Juice" },
-  { name: "Veg Biryani", price: "Rs.200", available: false, category: "Main Course" }
-];
+let menuItems = [];
+
+const storedMenu = localStorage.getItem('menuItems');
+if (storedMenu) {
+  menuItems = JSON.parse(storedMenu);
+} else {
+  menuItems = [
+    { name: "Veg Burger", price: "Rs.120", available: true, category: "Starter", description: "Delicious veg patty burger", time: 10 },
+    { name: "Paneer Pizza", price: "Rs.250", available: false, category: "Starter", description: "Cheesy paneer pizza", time: 15 },
+    { name: "French Fries", price: "Rs.80", available: true, category: "Starter", description: "Crispy golden fries", time: 8 },
+    { name: "Cheese Sandwich", price: "Rs.150", available: true, category: "Main Course", description: "Grilled cheese sandwich", time: 12 },
+    { name: "Cold Coffee", price: "Rs.90", available: false, category: "Juice", description: "Chilled coffee delight", time: 5 },
+    { name: "Chicken Roll", price: "Rs.180", available: true, category: "Main Course", description: "Spicy chicken roll", time: 14 },
+    { name: "Mango Shake", price: "Rs.110", available: true, category: "Juice", description: "Fresh mango shake", time: 6 },
+    { name: "Veg Biryani", price: "Rs.200", available: false, category: "Main Course", description: "Aromatic veg biryani", time: 20 }
+  ];
+}
+
+
 
 
 for (let i = 1; i <= 20; i++) {
@@ -130,30 +139,70 @@ function renderContactPage() {
 }
 
 function renderMenuManagement() {
-  contentBox.innerHTML = `
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-      <input type="text" id="menuSearch" placeholder="Search..." style="padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
-      <button id="addMenuBtn" style="padding: 6px 12px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">+ ADD</button>
-    </div>
-    <div id="menuCategories"></div>
-  `;
+ contentBox.innerHTML = `
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+    <input type="text" id="menuSearch" placeholder="Search..." style="padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+    <select id="sortMenu" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px; margin-right: 10px;">
+      <option value="">Sort</option>
+      <option value="priceAsc">Price: Low to High</option>
+      <option value="priceDesc">Price: High to Low</option>
+      <option value="timeAsc">Time: Low to High</option>
+      <option value="timeDesc">Time: High to Low</option>
+    </select>
+    <button id="addMenuBtn" style="padding: 6px 12px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">+ ADD</button>
+  </div>
+  <div id="menuCategories"></div>
+`;
+
 
   document.getElementById('addMenuBtn').addEventListener('click', openAddMenuModal);
   document.getElementById('menuSearch').addEventListener('input', (e) => {
     renderMenuCards(e.target.value.toLowerCase());
   });
 
+  document.getElementById('sortMenu').addEventListener('change', () => {
+  const searchValue = document.getElementById('menuSearch').value.toLowerCase();
+  renderMenuCards(searchValue);
+});
+
+
   renderMenuCards('');
 }
 
 function renderMenuCards(searchTerm) {
+  const sortValue = document.getElementById('sortMenu')?.value;
+
+  // 🔹 Filter karo
+  let filteredItems = menuItems.filter((item) => {
+    return (
+      !searchTerm ||
+      item.name.toLowerCase().includes(searchTerm) ||
+      item.category.toLowerCase().includes(searchTerm)
+    );
+  });
+
+  // 🔹 Sort karo
+  if (sortValue === 'priceAsc') {
+    filteredItems.sort((a, b) => parseInt(a.price.replace('Rs.', '')) - parseInt(b.price.replace('Rs.', '')));
+  } else if (sortValue === 'priceDesc') {
+    filteredItems.sort((a, b) => parseInt(b.price.replace('Rs.', '')) - parseInt(a.price.replace('Rs.', '')));
+  } else if (sortValue === 'timeAsc') {
+    filteredItems.sort((a, b) => (a.time || 0) - (b.time || 0));
+  } else if (sortValue === 'timeDesc') {
+    filteredItems.sort((a, b) => (b.time || 0) - (a.time || 0));
+  }
+
+  // 🔹 Group banao
   const grouped = { Starter: [], "Main Course": [], Juice: [] };
-  menuItems.forEach((item, idx) => {
-    if (!searchTerm || item.name.toLowerCase().includes(searchTerm)) {
-      grouped[item.category || "Starter"].push({ ...item, index: idx });
+  filteredItems.forEach((item, idx) => {
+    if (grouped[item.category]) {
+      grouped[item.category].push({ ...item, index: idx });
+    } else {
+      grouped["Starter"].push({ ...item, index: idx });
     }
   });
 
+  // 🔹 HTML build
   let html = '';
   Object.keys(grouped).forEach(category => {
     if (grouped[category].length) {
@@ -162,13 +211,25 @@ function renderMenuCards(searchTerm) {
         html += `
           <div class="menu-card">
             <div class="menu-header">
-              <span><strong>${item.name}</strong></span>
+              <span>
+                <span style="width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:5px; background:${item.available ? 'green' : 'red'};"></span>
+                <strong>${item.name}</strong>
+              </span>
               <span><strong>${item.price}</strong></span>
               <div class="menu-actions">
                 <button class="edit-btn" data-index="${item.index}">EDIT</button>
                 <button class="availability-btn ${item.available ? 'available' : 'unavailable'}" data-index="${item.index}">
                   ${item.available ? 'AVAILABLE' : 'UNAVAILABLE'}
                 </button>
+                <button class="delete-btn" data-index="${item.index}" style="background: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer;">DELETE</button>
+                <span class="dropdown-arrow">▼</span>
+              </div>
+            </div>
+            <div class="live-order-details" style="display: none; width: 100%; padding: 10px 0 0 0;">
+              <div style="font-size: 14px; color: #444; padding-left: 10px;">
+                <p><strong>Description:</strong> ${item.description || "N/A"}</p>
+                <p><strong>Category:</strong> ${item.category}</p>
+                <p><strong>Time to prepare:</strong> ${item.time || "N/A"} min</p>
               </div>
             </div>
           </div>
@@ -179,7 +240,7 @@ function renderMenuCards(searchTerm) {
 
   document.getElementById('menuCategories').innerHTML = html;
 
-  // Setup handlers as before
+  // 🔹 Event handlers
   document.querySelectorAll('.edit-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -192,13 +253,28 @@ function renderMenuCards(searchTerm) {
       e.stopPropagation();
       const index = btn.dataset.index;
       menuItems[index].available = !menuItems[index].available;
+      saveMenuToStorage();
       renderMenuCards(searchTerm);
     });
   });
+
+  document.querySelectorAll('.delete-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const index = btn.dataset.index;
+    showDeleteConfirm(index, searchTerm);
+  });
+});
+
+  document.querySelectorAll('.dropdown-arrow').forEach(arrow => {
+    arrow.addEventListener('click', () => {
+      const details = arrow.closest('.menu-card').querySelector('.live-order-details');
+      const isVisible = details.style.display === 'block';
+      details.style.display = isVisible ? 'none' : 'block';
+      arrow.classList.toggle('open', !isVisible);
+    });
+  });
 }
-
-
-
 
 
 // === MODAL FUNCTIONS ===
@@ -241,9 +317,80 @@ function closeMenuModal() {
 function saveMenuItem() {
   const name = document.getElementById('menuName').value;
   const price = "Rs." + document.getElementById('menuPrice').value;
-  menuItems.push({ name, price, available: true });
+  const desc = document.getElementById('menuDesc').value;
+  const time = document.getElementById('menuTime').value;
+  const categoryInput = document.querySelector('input[name="category"]:checked');
+  const category = categoryInput ? categoryInput.value : "Starter";
+
+  menuItems.push({
+    name,
+    price,
+    description: desc,
+    time,
+    category,
+    available: true
+  });
+
   closeMenuModal();
   renderMenuManagement();
+  saveMenuToStorage();
+}
+
+  function openEditMenuModal(index) {
+  const item = menuItems[index];
+
+  document.getElementById('modal-root').innerHTML = `
+    <div id="menuModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 999;">
+      <div style="background: white; padding: 30px; border-radius: 12px; width: 800px; display: grid; grid-template-columns: 1fr 2fr; gap: 30px; position: relative;">
+        <button onclick="closeMenuModal()" style="position: absolute; top: 10px; right: 10px; background: #eee; color: #333; border: 1px solid #ccc; border-radius: 50%; width: 28px; height: 28px; font-size: 16px; font-weight: bold; cursor: pointer; line-height: 28px; text-align: center;">X</button>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
+          <div style="border: 2px dashed #ccc; width: 150px; height: 150px; display: flex; justify-content: center; align-items: center; border-radius: 10px; cursor: pointer;">
+            <input type="file" id="uploadImage" style="display: none;">
+            <label for="uploadImage" style="cursor: pointer; font-size: 14px; color: #666;"><div style="font-size: 32px; color: #28a745;">+</div>upload image</label>
+          </div>
+          <input type="number" id="menuTime" placeholder="Time (Min.)" value="${item.time || ''}" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc;">
+          <input type="number" id="menuPrice" placeholder="Price" value="${item.price.replace('Rs.', '')}" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc;">
+        </div>
+        <div>
+          <label>Name</label>
+          <input type="text" id="menuName" value="${item.name}" placeholder="Name" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc;">
+          <label>Description</label>
+          <textarea id="menuDesc" placeholder="Description" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc; height: 80px;">${item.description || ''}</textarea>
+          <label>Category</label><br/>
+          <label><input type="radio" name="category" value="Starter" ${item.category === 'Starter' ? 'checked' : ''}> Starter</label>
+          <label><input type="radio" name="category" value="Main Course" ${item.category === 'Main Course' ? 'checked' : ''}> Main Course</label>
+          <label><input type="radio" name="category" value="Juice" ${item.category === 'Juice' ? 'checked' : ''}> Juice</label>
+          <div style="text-align: right; margin-top: 20px;">
+            <button onclick="saveEditedMenuItem(${index})" style="background: #28a745; color: white; padding: 8px 18px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px;">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+
+function saveEditedMenuItem(index) {
+  const name = document.getElementById('menuName').value;
+  const price = "Rs." + document.getElementById('menuPrice').value;
+  const desc = document.getElementById('menuDesc').value;
+  const time = document.getElementById('menuTime').value;
+  const categoryInput = document.querySelector('input[name="category"]:checked');
+  const category = categoryInput ? categoryInput.value : "Starter";
+
+  menuItems[index] = { 
+    ...menuItems[index],
+    name,
+    price,
+    description: desc,
+    time,
+    category
+  };
+
+  closeMenuModal();
+  renderMenuManagement();
+  saveMenuToStorage();
 }
 
 // === HELPERS ===
@@ -274,6 +421,33 @@ function setupDeliveredButtons(type) {
     });
   });
 }
+
+function showDeleteConfirm(index, searchTerm) {
+  document.getElementById('modal-root').innerHTML = `
+    <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 999;">
+      <div style="background: white; padding: 20px 30px; border-radius: 8px; text-align: center; max-width: 400px;">
+        <p style="font-size: 18px; margin-bottom: 20px;">Are you sure you want to delete this item?</p>
+        <button style="background: #dc3545; color: white; padding: 6px 12px; border: none; border-radius: 4px; margin-right: 10px; cursor: pointer;"
+          onclick="confirmDelete(${index}, '${searchTerm}')">Yes</button>
+        <button style="background: #ccc; color: #333; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer;"
+          onclick="closeMenuModal()">Cancel</button>
+      </div>
+    </div>
+  `;
+}
+
+function confirmDelete(index, searchTerm) {
+  menuItems.splice(index, 1);
+  closeMenuModal();
+  renderMenuCards(searchTerm);
+  saveMenuToStorage();
+}
+
+function saveMenuToStorage() {
+  localStorage.setItem('menuItems', JSON.stringify(menuItems));
+}
+
 
 // === NAV CLICK HANDLER ===
 const icons = {

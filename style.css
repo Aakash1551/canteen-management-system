@@ -29,8 +29,7 @@ body {
   height: 100vh;
   width: 80vw;
   background-color: #f1eeee;
-  padding-top: 3%;
-  padding-bottom: 2%;
+  padding: 3% 0 2% 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -42,8 +41,8 @@ body {
   display: flex;
   width: 100%;
   height: 8vh;
-  color: white;
   padding: 12%;
+  color: white;
   justify-content: flex-start;
   align-items: center;
   cursor: pointer;
@@ -52,11 +51,11 @@ body {
 .box2 {
   width: 100%;
   height: 50vh;
+  margin-top: 20%;
   display: flex;
   justify-content: center;
   align-items: flex-end;
   color: white;
-  margin-top: 20%;
 }
 
 .box:hover,
@@ -98,7 +97,6 @@ body {
   position: relative;
   margin-left: 70px;
 }
-
 
 .text {
   font-size: 20px;
@@ -163,10 +161,10 @@ a:hover {
   height: 10vh;
   width: 90%;
   background-color: white;
-  display: flex;
-  align-items: center;
   border-radius: 10px;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
 }
 
 .text1 {
@@ -179,31 +177,31 @@ a:hover {
   height: 75vh;
   width: 90%;
   background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-radius: 10px;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
   overflow-y: auto;
   padding: 10px;
 }
 
 /* === Live & Pre-Order Cards === */
 .live-orders-container {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  width: 100%;
   align-items: center;
+  gap: 20px;
 }
 
 .live-order-card {
+  width: 95%;
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   padding: 15px 20px;
   margin: 15px 0;
-  width: 95%;
 }
 
 .live-order-header {
@@ -251,43 +249,39 @@ a:hover {
   transform: rotate(180deg);
 }
 
-/* MENU CATEGORY WRAPPER FULL WIDTH */
+/* === Menu === */
 #menuCategories {
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center the cards nicely */
+  align-items: center;
 }
 
-/* MENU CARD STYLING LIKE LIVE ORDER */
 .menu-card {
+  width: 100%;
+  max-width: 1000px;
   background-color: white;
   border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   padding: 15px 20px;
   margin: 10px 0;
-  width: 100%;         /* Take full width of parent */
-  max-width: 1000px;   /* Limit max size for large screens */
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-/* MENU HEADER FLEX */
 .menu-header {
-  display: flex;
   width: 100%;
+  display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-/* ACTION BUTTONS ROW */
 .menu-actions {
   display: flex;
   gap: 10px;
 }
 
-/* EDIT BUTTON SAME STYLE AS LIVE ORDER YELLOW */
 .edit-btn {
   background-color: #FFD966;
   color: black;
@@ -297,7 +291,6 @@ a:hover {
   cursor: pointer;
 }
 
-/* AVAILABILITY BUTTONS COLOR */
 .availability-btn {
   border: none;
   padding: 6px 12px;
@@ -314,11 +307,15 @@ a:hover {
   background-color: #dc3545;
 }
 
-/* CATEGORY TITLE */
 .menu-category {
+  width: 100%;
+  max-width: 1000px;
   font-size: 20px;
   font-weight: bold;
   margin: 15px 0 8px 0;
+}
+
+.live-order-details {
   width: 100%;
-  max-width: 1000px;
+  padding: 10px;
 }

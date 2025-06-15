@@ -1,14 +1,15 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sidebar Dropdown SPA</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
+
+    <!-- Sidebar -->
     <div class="hero">
 
       <!-- Home -->
@@ -17,7 +18,7 @@
         <div class="text">Home</div>
       </div>
 
-      <!-- Order -->
+      <!-- Order Dropdown -->
       <div class="box dropdown-toggle" data-target="orderDropdown" role="button" tabindex="0" aria-expanded="false" aria-controls="orderDropdown">
         <div class="icon2 icon"></div>
         <div class="text">Order</div>
@@ -29,7 +30,7 @@
         <div class="dropdown-item nav-item" data-page="history" role="button" tabindex="0">History</div>
       </div>
 
-      <!-- Manage -->
+      <!-- Manage Dropdown -->
       <div class="box dropdown-toggle" data-target="manageDropdown" role="button" tabindex="0" aria-expanded="false" aria-controls="manageDropdown">
         <div class="icon3 icon"></div>
         <div class="text">Manage</div>
@@ -41,24 +42,30 @@
         <div class="dropdown-item nav-item" data-page="delivery" role="button" tabindex="0">Delivery</div>
       </div>
 
+      <!-- Contact -->
       <div class="box2">
         <div class="box Contact nav-item" data-page="contact" role="button" tabindex="0">
           <div class="icon4 icon"></div>
           <div class="text">Contact Us</div>
         </div>
       </div>
+
     </div>
 
+    <!-- Main Content -->
     <div class="main">
       <div class="heading-box">
         <div class="icon5 icon" id="heading-icon"></div>
         <div class="text1" id="page-title">Home</div>
       </div>
-      <div class="content-box" id="content-box">
-      </div>
+      <div class="content-box" id="content-box"></div>
     </div>
+
   </div>
+
+  <!-- Modal Root -->
   <div id="modal-root"></div>
+
   <script src="script.js"></script>
 </body>
 </html>
