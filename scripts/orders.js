@@ -1,22 +1,35 @@
-// orders.js
-
 export let liveOrders = [];
 export let historyOrders = [];
 export let preOrders = [];
 export let preOrderHistory = [];
+
+function randomTime() {
+  const hour = Math.floor(Math.random() * 12) + 1;
+  const minute = Math.floor(Math.random() * 60);
+  const ampm = Math.random() > 0.5 ? 'AM' : 'PM';
+  return `${hour}:${minute.toString().padStart(2, '0')} ${ampm}`;
+}
 
 for (let i = 1; i <= 20; i++) {
   liveOrders.push({
     name: `Customer ${i}`,
     orderNo: `#${i}`,
     price: `Rs.${Math.floor(Math.random() * 500) + 100}`,
-    items: ["1x Item A", "2x Item B", "1x Item C"]
+    items: ["1x Item A", "2x Item B", "1x Item C"],
+    placedAt: randomTime()
   });
+
+  const startHour = Math.floor(4 + Math.random() * 6); // 4 to 9 PM
+  const endHour = startHour + 1;
+  const deliveryWindow = `${startHour}:00 PM - ${endHour}:00 PM`;
+
   preOrders.push({
     name: `Customer ${i}`,
     orderNo: `#${i}`,
     price: `Rs.${Math.floor(Math.random() * 500) + 100}`,
-    items: ["1x Item A", "2x Item B", "1x Item C"]
+    items: ["1x Item A", "2x Item B", "1x Item C"],
+    placedAt: randomTime(),
+    deliveryWindow: deliveryWindow
   });
 }
 
@@ -33,6 +46,9 @@ export function renderLiveOrders() {
       </div>
       <div class="live-order-details" style="display: none;">
         ${order.items.join('<br>')}
+        <div style="margin-top: 5px; font-size: 12px; color: #666;">
+          Placed at: ${order.placedAt}
+        </div>
       </div>
     </div>
   `).join('');
@@ -54,6 +70,10 @@ export function renderPreOrders() {
       </div>
       <div class="live-order-details" style="display: none;">
         ${order.items.join('<br>')}
+        <div style="margin-top: 5px; font-size: 12px; color: #666;">
+          Placed at: ${order.placedAt}<br>
+          Delivery window: ${order.deliveryWindow}
+        </div>
       </div>
     </div>
   `).join('');

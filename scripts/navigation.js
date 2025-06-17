@@ -3,6 +3,7 @@ import { renderLiveOrders, renderPreOrders } from './orders.js';
 import { renderMenuManagement } from './menu.js';
 import { renderContactPage } from './contact.js';
 import { renderHistory } from './history.js';
+import { renderCustomOrderPage } from './customOrder.js';
 
 export function setupNavigation() {
   const contentBox = document.getElementById('content-box');
@@ -39,6 +40,9 @@ export function setupNavigation() {
           break;
         case 'contact':
           renderContactPage();
+          break;
+        case 'customOrder':
+          renderCustomOrderPage();
           break;
         default:
           contentBox.innerHTML = `<h2>${item.textContent.trim()} Page</h2>`;

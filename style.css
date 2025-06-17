@@ -10,7 +10,6 @@ body {
   background-color: #d9d9d9;
 }
 
-/* === LAYOUT === */
 .container {
   display: flex;
 }
@@ -86,7 +85,6 @@ body {
   color: inherit;
 }
 
-/* === SIDEBAR ICONS === */
 .icon {
   width: 30px;
   height: 30px;
@@ -104,7 +102,6 @@ body {
   margin-left: 70px;
 }
 
-/* === DROPDOWN === */
 .dropdown-content {
   display: none;
   flex-direction: column;
@@ -146,7 +143,6 @@ body {
   border-top-color: black;
 }
 
-/* === LINKS === */
 a {
   text-decoration: none;
   color: white;
@@ -333,70 +329,207 @@ a:hover {
 
 .modal-box-styled {
   position: relative;
-  background: white;
-  border-radius: 10px;
-  padding: 20px;
-  max-width: 600px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 30px 35px 70px 35px;
+  max-width: 650px;
   width: 90%;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
 .modal-content-styled {
-  display: flex;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 25px;
 }
 
 .modal-left,
 .modal-right {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-}
-
-.modal-left {
-  flex: 1;
-}
-
-.modal-right {
-  flex: 2;
+  gap: 16px;
 }
 
 .input-styled,
 .textarea-styled {
   width: 100%;
-  padding: 8px;
+  padding: 12px 14px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 6px;
+  font-size: 15px;
 }
 
-.image-upload-box {
-  border: 2px dashed #ccc;
-  border-radius: 4px;
-  text-align: center;
-  padding: 30px 0;
-  color: #999;
-  cursor: pointer;
+.input-styled:focus,
+.textarea-styled:focus {
+  border-color: #28a745;
+  outline: none;
+}
+
+.textarea-styled {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.category-group {
+  display: flex;
+  gap: 15px;
+  font-size: 15px;
 }
 
 .modal-save-styled {
-  margin-top: 15px;
-  padding: 10px 20px;
+  position: absolute;
+  bottom: 20px;
+  right: 30px;
+  padding: 12px 24px;
   background: #28a745;
   color: white;
   border: none;
   border-radius: 6px;
+  font-size: 15px;
   cursor: pointer;
+  transition: background 0.3s;
+}
+
+.modal-save-styled:hover {
+  background: #218838;
 }
 
 .modal-close-styled {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 12px;
+  right: 12px;
   background: none;
   border: none;
-  font-size: 18px;
+  font-size: 22px;
+  cursor: pointer;
+  color: #666;
+}
+
+.modal-close-styled:hover {
+  color: #000;
+}
+
+.image-upload-box {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  text-align: center;
+  padding: 35px;
+  color: #777;
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.3s, color 0.3s;
+}
+
+.image-upload-box:hover {
+  border-color: #28a745;
+  color: #28a745;
+}
+
+/* === CUSTOM ORDER NEW FIXES === */
+.menu-card-fixed {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 10px;
+  width: 100%;
+  gap: 10px;
+}
+
+.menu-info {
+  font-weight: bold;
+  font-size: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-grow: 1;
+}
+
+.add-cart-btn-fixed {
+  padding: 6px 14px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.add-cart-btn-fixed:hover {
+  background: #0056b3;
+}
+
+.added {
+  background: #d4edda;
+}
+
+.cart-summary {
+  position: sticky;   /* CHANGE from fixed to sticky */
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #28a745;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  font-weight: bold;
+  z-index: 1000;
+}
+
+
+.primary-btn {
+  padding: 8px 30px;
+  background: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
   cursor: pointer;
 }
 
-.category-group label {
-  margin-right: 10px;
+.primary-btn:hover {
+  background: #218838;
+}
+
+.custom-order-wrapper {
+  background: #fff;
+  padding: 30px 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  max-width: 400px;
+  margin: 50px auto;
+  text-align: center;
+}
+
+.custom-order-wrapper h2 {
+  font-size: 26px;
+  margin-bottom: 20px;
+}
+
+.custom-order-wrapper input[type=\"text\"] {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.custom-order-wrapper .order-type {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.custom-order-wrapper .primary-btn {
+  padding: 10px 30px;
+  font-size: 16px;
+  border-radius: 6px;
 }

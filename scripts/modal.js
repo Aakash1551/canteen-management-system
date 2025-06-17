@@ -1,46 +1,26 @@
-// Import render function to refresh menu UI after add/edit
 import { renderMenuManagement } from './menu.js';
 
-/**
- * Open modal for adding a new menu item
- */
 export function openAddMenuModal() {
-  removeExistingModal();  // Ensure no duplicate modal
-
-  const modal = createModalHTML();  // Create blank form
+  removeExistingModal();
+  const modal = createModalHTML();
   document.getElementById('modal-root').appendChild(modal);
-
-  setupModalEvents(modal, null);  // Setup save/cancel for add mode
+  setupModalEvents(modal, null);
 }
 
-/**
- * Open modal for editing an existing menu item
- * @param {number} index - index of the item in localStorage array
- */
 export function openEditMenuModal(index) {
-  removeExistingModal();  // Ensure no duplicate modal
-
+  removeExistingModal();
   const items = JSON.parse(localStorage.getItem('menuItems')) || [];
-  const item = items[index];  // Get item data
-
-  const modal = createModalHTML(item);  // Pre-fill form with item data
+  const item = items[index];
+  const modal = createModalHTML(item);
   document.getElementById('modal-root').appendChild(modal);
-
-  setupModalEvents(modal, index);  // Setup save/cancel for edit mode
+  setupModalEvents(modal, index);
 }
 
-/**
- * Utility to remove any existing modal overlay
- */
 function removeExistingModal() {
-  const existingModal = document.querySelector('.modal-overlay');
-  if (existingModal) existingModal.remove();
+  const existing = document.querySelector('.modal-overlay');
+  if (existing) existing.remove();
 }
 
-/**
- * Create modal HTML with optional pre-filled data
- * @param {object} data - item data to prefill (for edit)
- */
 function createModalHTML(data = {}) {
   const div = document.createElement('div');
   div.className = 'modal-overlay';
@@ -60,10 +40,12 @@ function createModalHTML(data = {}) {
           <input type="text" name="menuName" placeholder="Name" value="${data.name || ''}" class="input-styled">
           <textarea name="menuDesc" placeholder="Description" class="textarea-styled">${data.description || ''}</textarea>
           <div class="category-group">
-            <label><input type="radio" name="category" value="Starter" ${data.category === 'Starter' ? 'checked' : ''}> Starter</label>
-            <label><input type="radio" name="category" value="Main Course" ${data.category === 'Main Course' ? 'checked' : ''}> Main Course</label>
-            <label><input type="radio" name="category" value="Juice" ${data.category === 'Juice' ? 'checked' : ''}> Juice</label>
-          </div>
+  <label><input type="radio" name="category" value="Starter" ${data.category === 'Starter' ? 'checked' : ''}> Starter</label>
+  <label><input type="radio" name="category" value="Main Course" ${data.category === 'Main Course' ? 'checked' : ''}> Main Course</label>
+  <label><input type="radio" name="category" value="Juice" ${data.category === 'Juice' ? 'checked' : ''}> Juice</label>
+</div>
+<input type="text" name="customCategory" placeholder="Or enter custom section (e.g. Chinese, Ice Cream)" class="input-styled" value="${data.category && !['Starter','Main Course','Juice'].includes(data.category) ? data.category : ''}">
+
         </div>
       </div>
       <button class="modal-save-styled">Save</button>
@@ -72,47 +54,59 @@ function createModalHTML(data = {}) {
   return div;
 }
 
-/**
- * Attach event handlers for modal save and close buttons
- * @param {HTMLElement} modal - the modal element
- * @param {number|null} editIndex - null if add mode, index if edit mode
- */
 function setupModalEvents(modal, editIndex) {
-  // Close button handler
+  let imageData = null; // To hold uploaded image data
+
   modal.querySelector('.modal-close-styled').addEventListener('click', () => modal.remove());
 
-  // Save button handler
   modal.querySelector('.modal-save-styled').addEventListener('click', () => {
     const item = readModalForm(modal);
     if (item) {
+      if (imageData) {
+        item.image = imageData;
+      } else if (editIndex !== null) {
+        const items = JSON.parse(localStorage.getItem('menuItems')) || [];
+        item.image = items[editIndex]?.image || null; // retain existing image if no new upload
+      } else {
+        item.image = null;
+      }
+
       let items = JSON.parse(localStorage.getItem('menuItems')) || [];
       if (editIndex === null) {
-        // Add mode
         items.push({ ...item, available: true });
       } else {
-        // Edit mode
         items[editIndex] = { ...items[editIndex], ...item };
       }
-      localStorage.setItem('menuItems', JSON.stringify(items));  // Save updated list
+      localStorage.setItem('menuItems', JSON.stringify(items));
       modal.remove();
-      renderMenuManagement();  // Refresh UI
+      renderMenuManagement();
+    }
+  });
+
+  modal.querySelector('[name="menuImage"]').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        imageData = evt.target.result; // save base64
+        modal.querySelector('.image-upload-box').innerHTML = `
+          <img src="${imageData}" alt="Uploaded" style="max-width:100%; border-radius:6px;">
+        `;
+      };
+      reader.readAsDataURL(file);
     }
   });
 }
 
-/**
- * Read and validate form data from modal
- * @param {HTMLElement} modal - the modal element
- * @returns {object|null} - form data or null if invalid
- */
 function readModalForm(modal) {
   const name = modal.querySelector('[name="menuName"]').value.trim();
   const price = modal.querySelector('[name="menuPrice"]').value.trim();
   const desc = modal.querySelector('[name="menuDesc"]').value.trim();
   const time = modal.querySelector('[name="menuTime"]').value.trim();
-  const category = modal.querySelector('input[name="category"]:checked')?.value;
+  const customCat = modal.querySelector('[name="customCategory"]').value.trim();
+  const selectedCat = modal.querySelector('input[name="category"]:checked')?.value;
 
-  if (!name || !price || !category) {
+  if (!name || !price || (!customCat && !selectedCat)) {
     alert('Please fill in name, price, and category');
     return null;
   }
@@ -122,6 +116,7 @@ function readModalForm(modal) {
     price: "Rs." + price,
     description: desc,
     time,
-    category
+    category: customCat || selectedCat
   };
 }
+
