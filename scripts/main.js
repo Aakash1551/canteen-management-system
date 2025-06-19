@@ -1,32 +1,41 @@
-// Import sidebar functionality: dropdowns + keyboard access for accessibility
+// main.js
+
+import { renderLoginPage, injectAuthStyles } from './auth.js';
 import { setupSidebarDropdowns, setupSidebarKeyboardAccess } from './sidebar.js';
-
-// Import navigation setup (handles page switching when sidebar items are clicked)
 import { setupNavigation } from './navigation.js';
-
-// Import modal functions for adding/editing menu items (exposed to global for button use)
 import { openAddMenuModal, openEditMenuModal } from './modal.js';
 
-// Run setup when DOM is fully loaded
+// Run on page load
 window.addEventListener('DOMContentLoaded', () => {
-  // Initialize sidebar dropdown toggle behavior (Order / Manage sections)
-  setupSidebarDropdowns();
-
-  // Enable keyboard navigation (Enter / Space) for sidebar items
-  setupSidebarKeyboardAccess();
-
-  // Set up navigation between pages (Home, Menu, Orders, Contact, etc.)
-  setupNavigation();
-
-  // Render initial welcome message in content box
-  document.getElementById('content-box').innerHTML = `
-    <div style="padding: 30px; text-align: center;">
-      <h2 style="font-size: 32px;">Welcome to the Dashboard!</h2>
-      <p style="font-size: 18px; color: #555;">Select an option from the sidebar to get started.</p>
-    </div>
-  `;
+  // 🔐 Show login/signup first
+  injectAuthStyles();
+  renderLoginPage();
 });
 
-// Expose modal functions globally so other scripts (like inline button clicks) can trigger them
+// Global modal functions for add/edit menu
 window.openAddMenuModal = openAddMenuModal;
 window.openEditMenuModal = openEditMenuModal;
+
+// 🔁 This function will be called after login success from auth.js
+export function showDashboardAfterLogin() {
+  // Hide auth screen
+  document.getElementById('auth-screen').style.display = 'none';
+
+  // Show dashboard container
+  document.getElementById('dashboard').style.display = 'flex';
+
+  // If "Profile" not already added, add it
+  if (!document.querySelector('[data-page="profile"]')) {
+    const contactBox = document.querySelector('[data-page="contact"]').closest('.box2');
+    const profileBox = document.createElement('div');
+    profileBox.className = 'box nav-item';
+    profileBox.setAttribute('data-page', 'profile');
+    profileBox.innerHTML = `<div class="icon icon-login"></div><div class="text">Profile</div>`;
+    contactBox.insertAdjacentElement('afterend', profileBox);
+  }
+
+  // Re-initialize sidebar + nav
+  setupSidebarDropdowns();
+  setupSidebarKeyboardAccess();
+  setupNavigation();
+}

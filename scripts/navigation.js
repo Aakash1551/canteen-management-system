@@ -4,6 +4,8 @@ import { renderMenuManagement } from './menu.js';
 import { renderContactPage } from './contact.js';
 import { renderHistory } from './history.js';
 import { renderCustomOrderPage } from './customOrder.js';
+import { renderLoginPage, renderSignupPage, injectAuthStyles } from './auth.js';
+
 
 export function setupNavigation() {
   const contentBox = document.getElementById('content-box');
@@ -43,6 +45,14 @@ export function setupNavigation() {
           break;
         case 'customOrder':
           renderCustomOrderPage();
+          break;
+        case 'login':
+          injectAuthStyles();
+          renderLoginPage();
+          break;
+        case 'signup':
+          injectAuthStyles();
+          renderSignupPage();
           break;
         default:
           contentBox.innerHTML = `<h2>${item.textContent.trim()} Page</h2>`;

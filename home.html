@@ -7,7 +7,11 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
+  <!-- 🔐 Login/Signup screen container -->
+  <div id="auth-screen"></div>
+
+  <!-- 🧭 Main Dashboard (hidden until login) -->
+  <div class="container" id="dashboard" style="display: none;">
 
     <!-- Sidebar -->
     <div class="hero">
@@ -28,9 +32,8 @@
         <div class="dropdown-item nav-item" data-page="liveOrder" role="button" tabindex="0">Live order</div>
         <div class="dropdown-item nav-item" data-page="preOrder" role="button" tabindex="0">Pre-Order</div>
         <div class="dropdown-item nav-item" data-page="history" role="button" tabindex="0">History</div>
-        <div class="dropdown-item nav-item" data-page="customOrder" role="button" tabindex="0">Custom Order</div> <!-- ✅ NEW -->
+        <div class="dropdown-item nav-item" data-page="customOrder" role="button" tabindex="0">Custom Order</div>
       </div>
-
 
       <!-- Manage Dropdown -->
       <div class="box dropdown-toggle" data-target="manageDropdown" role="button" tabindex="0" aria-expanded="false" aria-controls="manageDropdown">
@@ -52,6 +55,8 @@
         </div>
       </div>
 
+      <!-- Profile placeholder will be inserted here after login -->
+
     </div>
 
     <!-- Main Content -->
@@ -62,14 +67,12 @@
       </div>
       <div class="content-box" id="content-box"></div>
     </div>
-
   </div>
 
   <!-- Modal Root -->
   <div id="modal-root"></div>
 
-  <!-- <script src="script.js"></script> -->
-   <script type="module" src="scripts/main.js"></script>
-
+  <script type="module" src="scripts/main.js"></script>
 </body>
+
 </html>
