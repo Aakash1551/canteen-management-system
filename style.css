@@ -178,26 +178,35 @@ a:hover {
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  position: relative;
 }
+
 
 .text1 {
   font-size: 25px;
   color: black;
-  margin-left: 2%;
+  margin-left: 10px;
+  white-space: nowrap;       /* ✅ Prevents wrapping */
+  overflow: hidden;          /* ✅ Prevents spilling */
+  text-overflow: ellipsis;   /* ✅ Adds ... if it's too long */
 }
 
+
 .content-box {
+  height: calc(100vh - 10vh - 20px); /* 10vh heading + some buffer */
+  overflow-y: auto;
   width: 90%;
-  height: 75vh;
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow-y: auto;
   padding: 10px;
 }
+
 
 /* === LIVE / PRE-ORDER CARDS === */
 .live-orders-container {
@@ -562,13 +571,13 @@ a:hover {
 }
 /* === DASHBOARD VIEW STATS WRAPPING === */
 .content-box.dashboard-view {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  flex: unset;
+  height: auto;
+  overflow-y: auto;
   padding: 20px;
-  overflow: hidden;
-  box-sizing: border-box;
+  display: block;
 }
+
 
 /* === STATS CARD WRAPPER === */
 .dashboard-grid {
@@ -702,11 +711,16 @@ a:hover {
 }
 
 .profile-wrapper {
-  position: relative;
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
   display: flex;
   align-items: center;
-  z-index: 10; /* ✅ make sure it sits on top */
+  z-index: 10;
 }
+
+
 
 .top-profile-pic {
   width: 42px;
@@ -739,3 +753,15 @@ a:hover {
 .profile-dropdown.show {
   display: block;
 }
+body, html {
+  height: 100%;
+  overflow: auto;
+}
+body.home-page .content-box.dashboard-view {
+  height: auto;
+  min-height: 77vh; /* 👈 adjust this number as you want */
+  display: block;
+  overflow-y: auto;
+  padding: 20px;
+}
+
