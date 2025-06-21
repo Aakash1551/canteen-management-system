@@ -1,7 +1,8 @@
-// customOrder.js — FINAL with Pre-Order slot input in summary modal
+// customOrder.js — FINAL with Confirm modal fix
 import { loadMenuItems } from './menu.js';
 import { liveOrders, preOrders, renderLiveOrders, renderPreOrders } from './orders.js';
 import { persistOrders } from './orders.js';
+
 let customCart = [];
 
 function injectCustomStyles() {
@@ -211,11 +212,18 @@ function showOrderSummaryModal(order, orderType) {
       }
       order.deliveryWindow = slot;
     }
-if (orderType === 'live') {
-  liveOrders.push(order);
-  renderLiveOrders();
-} else {
-  preOrders.push(order);
-  renderPreOrders();
+
+    if (orderType === 'live') {
+      liveOrders.push(order);
+      renderLiveOrders();
+    } else {
+      preOrders.push(order);
+      renderPreOrders();
+    }
+
+    persistOrders();
+
+    // ✅ FIX: Close the modal
+    modalRoot.innerHTML = '';
+  });
 }
-persistOrders();})} // <== this saves to localStorage}

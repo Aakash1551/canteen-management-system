@@ -32,13 +32,15 @@ export function showDashboardAfterLogin() {
   setupSidebarKeyboardAccess();
   setupNavigation();
 
-  // ✅ Auto-load Home page
-  document.querySelector('[data-page="home"]')?.click();
+  // ✅ Delay initial navigation to fix heading-card layout issue
+  setTimeout(() => {
+    document.querySelector('[data-page="home"]')?.click();
+  }, 50);
 
   // ✅ Delay profile setup so DOM is ready
   setTimeout(() => {
     setupProfileDropdown();
-  }, 50);
+  }, 100);
 }
 
 
@@ -47,9 +49,6 @@ function setupProfileDropdown() {
   const profilePic = document.getElementById('top-profile-pic');
   const dropdown = document.getElementById('profile-dropdown');
 
-  console.log("👀 profilePic:", profilePic);
-  console.log("👀 dropdown:", dropdown);
-
   if (!profilePic || !dropdown) {
     console.warn("❌ Profile image or dropdown not found.");
     return;
@@ -57,7 +56,6 @@ function setupProfileDropdown() {
 
   profilePic.addEventListener('click', (e) => {
     e.stopPropagation();
-    console.log("✅ Profile pic clicked");
     dropdown.classList.toggle('hidden');
   });
 

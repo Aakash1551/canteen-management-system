@@ -15,7 +15,7 @@ export let preOrders = loadFromStorage('preOrders');
 export let historyOrders = loadFromStorage('historyOrders');
 export let preOrderHistory = loadFromStorage('preOrderHistory');
 
-// 🧪 Only add dummy data if localStorage is empty
+// 🧪 Dummy data only once
 if (liveOrders.length === 0 && preOrders.length === 0) {
   function randomTime() {
     const hour = Math.floor(Math.random() * 12) + 1;
@@ -47,12 +47,10 @@ if (liveOrders.length === 0 && preOrders.length === 0) {
     });
   }
 
-  // 🧠 Save dummy data to localStorage so it's not added again
   saveToStorage('liveOrders', liveOrders);
   saveToStorage('preOrders', preOrders);
 }
 
-// ✅ Persist function to call after changes
 export function persistOrders() {
   saveToStorage('liveOrders', liveOrders);
   saveToStorage('preOrders', preOrders);
@@ -60,8 +58,16 @@ export function persistOrders() {
   saveToStorage('preOrderHistory', preOrderHistory);
 }
 
-// UI rendering + interaction (same as yours)
+// ✅ LIVE ORDERS
 export function renderLiveOrders() {
+  const contentBox = document.getElementById('content-box');
+  contentBox.className = 'content-box';
+  contentBox.style.display = 'flex';
+  contentBox.style.flexDirection = 'column';
+  contentBox.style.alignItems = 'center';
+  contentBox.style.height = 'calc(100vh - 10vh - 20px)';
+  contentBox.style.padding = '10px';
+
   const html = liveOrders.map(order => `
     <div class="live-order-card">
       <div class="live-order-header">
@@ -80,12 +86,22 @@ export function renderLiveOrders() {
       </div>
     </div>
   `).join('');
-  document.getElementById('content-box').innerHTML = `<div class="live-orders-container">${html}</div>`;
+
+  contentBox.innerHTML = `<div class="live-orders-container">${html}</div>`;
   setupOrderDropdowns();
   setupDeliveredButtons('live');
 }
 
+// ✅ PRE-ORDERS
 export function renderPreOrders() {
+  const contentBox = document.getElementById('content-box');
+  contentBox.className = 'content-box';
+  contentBox.style.display = 'flex';
+  contentBox.style.flexDirection =  'column';
+  contentBox.style.alignItems = 'center';
+  contentBox.style.height = 'calc(100vh - 10vh - 20px)';
+  contentBox.style.padding = '10px';
+
   const html = preOrders.map(order => `
     <div class="live-order-card">
       <div class="live-order-header">
@@ -105,11 +121,13 @@ export function renderPreOrders() {
       </div>
     </div>
   `).join('');
-  document.getElementById('content-box').innerHTML = `<div class="live-orders-container">${html}</div>`;
+
+  contentBox.innerHTML = `<div class="live-orders-container">${html}</div>`;
   setupOrderDropdowns();
   setupDeliveredButtons('pre');
 }
 
+// 🔽 Toggle dropdown
 function setupOrderDropdowns() {
   document.querySelectorAll('.dropdown-arrow').forEach(arrow => {
     arrow.addEventListener('click', () => {
@@ -121,6 +139,7 @@ function setupOrderDropdowns() {
   });
 }
 
+// ✅ DELIVERY BUTTONS
 export function setupDeliveredButtons(type) {
   const selector = type === 'live' ? '.live-delivered' : '.pre-delivered';
   document.querySelectorAll(selector).forEach(btn => {
@@ -132,11 +151,12 @@ export function setupDeliveredButtons(type) {
       if (index !== -1) {
         history.push(list[index]);
         list.splice(index, 1);
-        persistOrders(); // 💾 Save updates
+        persistOrders();
         type === 'live' ? renderLiveOrders() : renderPreOrders();
-         if (document.querySelector('.dashboard-view')) {
-    renderDashboard();
-  }
+
+        if (document.querySelector('.dashboard-view')) {
+          renderDashboard();
+        }
       }
     });
   });

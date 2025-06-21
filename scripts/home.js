@@ -8,13 +8,15 @@ import {
 import { menuItems } from "./menu.js";
 
 export function renderHome() {
-  document.body.classList.add('home-page');
-document.body.classList.remove('other-page');
+  // ✅ Set body class for home-specific CSS
+  document.body.classList.add("home-page");
+  document.body.classList.remove("other-page");
 
+  // ✅ Remove old profile wrapper if exists
   const previousWrapper = document.querySelector(".profile-wrapper");
   if (previousWrapper) previousWrapper.remove();
 
-  // ✅ Inject into heading-box only when on Home
+  // ✅ Inject profile section in heading-box
   const headingBox = document.querySelector(".heading-box");
   const profileWrapper = document.createElement("div");
   profileWrapper.className = "profile-wrapper";
@@ -25,77 +27,81 @@ document.body.classList.remove('other-page');
       <div class="dropdown-item" id="logout-btn">🔒 Logout</div>
     </div>
   `;
-  if (headingBox) {
-  headingBox.appendChild(profileWrapper);
-}
+  if (headingBox) headingBox.appendChild(profileWrapper);
 
-
-  // Add event listeners
+  // ✅ Setup profile dropdown toggle
   document.getElementById("top-profile-pic").addEventListener("click", () => {
     document.getElementById("profile-dropdown").classList.toggle("show");
   });
 
+  // ✅ Logout
   document.getElementById("logout-btn").addEventListener("click", () => {
     localStorage.removeItem("isLoggedIn");
     location.reload();
   });
 
- document.getElementById('view-profile').addEventListener('click', () => {
-  document.getElementById('profile-dropdown').classList.add('hidden');
-
-  const modalRoot = document.getElementById('modal-root');
-  modalRoot.innerHTML = `
-    <div class="modal-overlay">
-      <div class="modal-box-styled">
-        <button class="modal-close-styled">×</button>
-        <h3>👤 My Profile</h3>
-        <p><strong>Name:</strong> Chetan Jain</p>
-        <p><strong>Email:</strong> chef@example.com</p>
-        <p><strong>Role:</strong> Kitchen Admin</p>
+  // ✅ View profile modal
+  document.getElementById("view-profile").addEventListener("click", () => {
+    document.getElementById("profile-dropdown").classList.add("hidden");
+    const modalRoot = document.getElementById("modal-root");
+    modalRoot.innerHTML = `
+      <div class="modal-overlay">
+        <div class="modal-box-styled">
+          <button class="modal-close-styled">×</button>
+          <h3>👤 My Profile</h3>
+          <p><strong>Name:</strong> Chetan Jain</p>
+          <p><strong>Email:</strong> chef@example.com</p>
+          <p><strong>Role:</strong> Kitchen Admin</p>
+        </div>
       </div>
-    </div>
-  `;
-
-  modalRoot.querySelector('.modal-close-styled').addEventListener('click', () => {
-    modalRoot.innerHTML = '';
+    `;
+    modalRoot.querySelector(".modal-close-styled").addEventListener("click", () => {
+      modalRoot.innerHTML = "";
+    });
   });
-});
 
-
-  // Dashboard content
+  // ✅ Dashboard data
   const availableItems = menuItems.filter((item) => item.available).length;
   const unavailableItems = menuItems.filter((item) => !item.available).length;
 
+  // ✅ Prepare content-box
   const contentBox = document.getElementById("content-box");
 
+  // 🔥 FIX: Reset styles and classes to avoid expanded layout bug
+  contentBox.className = "content-box dashboard-view";
+  contentBox.removeAttribute("style");
+
+  // ✅ Inject dashboard UI
   contentBox.innerHTML = `
-  <div class="dashboard-welcome">
+    <div class="dashboard-welcome">
       <h2>👋 Welcome back, Chef!</h2>
     </div>
+
     <div class="dashboard-grid">
       <div class="dashboard-card green">
-  <h3>Live Orders</h3><p>${liveOrders.length}</p>
-</div>
-<div class="dashboard-card yellow">
-  <h3>Pre Orders</h3><p>${preOrders.length}</p>
-</div>
-<div class="dashboard-card gray">
-  <h3>History Orders</h3><p>${historyOrders.length}</p>
-</div>
-<div class="dashboard-card red">
-  <h3>Pre-Order History</h3><p>${preOrderHistory.length}</p>
-</div>
-<div class="dashboard-card blue">
-  <h3>Available Menu Items</h3><p>${availableItems}</p>
-</div>
-<div class="dashboard-card orange">
-  <h3>Unavailable Items</h3><p>${unavailableItems}</p>
-</div>
-
+        <h3>Live Orders</h3>
+        <p>${liveOrders.length}</p>
+      </div>
+      <div class="dashboard-card yellow">
+        <h3>Pre Orders</h3>
+        <p>${preOrders.length}</p>
+      </div>
+      <div class="dashboard-card gray">
+        <h3>History Orders</h3>
+        <p>${historyOrders.length}</p>
+      </div>
+      <div class="dashboard-card red">
+        <h3>Pre-Order History</h3>
+        <p>${preOrderHistory.length}</p>
+      </div>
+      <div class="dashboard-card blue">
+        <h3>Available Menu Items</h3>
+        <p>${availableItems}</p>
+      </div>
+      <div class="dashboard-card orange">
+        <h3>Unavailable Items</h3>
+        <p>${unavailableItems}</p>
+      </div>
     </div>
   `;
-
-  contentBox.classList.add("dashboard-view");
-
-  
 }

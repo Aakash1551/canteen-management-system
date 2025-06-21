@@ -40,6 +40,7 @@ export function setupNavigation() {
     item.addEventListener("click", () => {
       const page = item.dataset.page;
       // 🧹 Remove profile-wrapper if not on Home page
+      
 if (page !== "home") {
   const oldProfile = document.querySelector(".profile-wrapper");
   if (oldProfile) oldProfile.remove();
