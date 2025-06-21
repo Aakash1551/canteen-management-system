@@ -1,7 +1,7 @@
 // customOrder.js — FINAL with Pre-Order slot input in summary modal
 import { loadMenuItems } from './menu.js';
 import { liveOrders, preOrders, renderLiveOrders, renderPreOrders } from './orders.js';
-
+import { persistOrders } from './orders.js';
 let customCart = [];
 
 function injectCustomStyles() {
@@ -211,15 +211,11 @@ function showOrderSummaryModal(order, orderType) {
       }
       order.deliveryWindow = slot;
     }
-
-    if (orderType === 'live') {
-      liveOrders.push(order);
-      renderLiveOrders();
-    } else {
-      preOrders.push(order);
-      renderPreOrders();
-    }
-    alert('Order placed successfully!');
-    modalRoot.innerHTML = '';
-  });
+if (orderType === 'live') {
+  liveOrders.push(order);
+  renderLiveOrders();
+} else {
+  preOrders.push(order);
+  renderPreOrders();
 }
+persistOrders();})} // <== this saves to localStorage}

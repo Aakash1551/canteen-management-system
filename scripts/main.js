@@ -7,24 +7,27 @@ import { openAddMenuModal, openEditMenuModal } from './modal.js';
 
 // Run on page load
 window.addEventListener('DOMContentLoaded', () => {
-  // 🔐 Show login/signup first
   injectAuthStyles();
-  renderLoginPage();
+
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+  if (isLoggedIn) {
+    showDashboardAfterLogin();  // ✅ skip login screen
+  } else {
+    renderLoginPage();
+  }
 });
 
 // Global modal functions for add/edit menu
 window.openAddMenuModal = openAddMenuModal;
 window.openEditMenuModal = openEditMenuModal;
 
-// 🔁 This function will be called after login success from auth.js
+// 🔁 Called after successful login
 export function showDashboardAfterLogin() {
-  // Hide auth screen
   document.getElementById('auth-screen').style.display = 'none';
-
-  // Show dashboard container
   document.getElementById('dashboard').style.display = 'flex';
 
-  // If "Profile" not already added, add it
+  // Add Profile Button if not already
   if (!document.querySelector('[data-page="profile"]')) {
     const contactBox = document.querySelector('[data-page="contact"]').closest('.box2');
     const profileBox = document.createElement('div');
@@ -34,8 +37,44 @@ export function showDashboardAfterLogin() {
     contactBox.insertAdjacentElement('afterend', profileBox);
   }
 
-  // Re-initialize sidebar + nav
+  // 🧠 Initialize UI logic
   setupSidebarDropdowns();
   setupSidebarKeyboardAccess();
   setupNavigation();
+
+  // ✅ Auto-load Home page
+  document.querySelector('[data-page="home"]')?.click();
+
+  // ✅ Delay profile setup so DOM is ready
+  setTimeout(() => {
+    setupProfileDropdown();
+  }, 50);
+}
+
+
+// ✅ Profile dropdown click logic
+function setupProfileDropdown() {
+  const profilePic = document.getElementById('top-profile-pic');
+  const dropdown = document.getElementById('profile-dropdown');
+
+  console.log("👀 profilePic:", profilePic);
+  console.log("👀 dropdown:", dropdown);
+
+  if (!profilePic || !dropdown) {
+    console.warn("❌ Profile image or dropdown not found.");
+    return;
+  }
+
+  profilePic.addEventListener('click', (e) => {
+    e.stopPropagation();
+    console.log("✅ Profile pic clicked");
+    dropdown.classList.toggle('hidden');
+  });
+
+  document.addEventListener('click', (e) => {
+    const wrapper = document.querySelector('.profile-wrapper');
+    if (!wrapper?.contains(e.target)) {
+      dropdown.classList.add('hidden');
+    }
+  });
 }

@@ -1,80 +1,103 @@
 // navigation.js
-import { renderLiveOrders, renderPreOrders } from './orders.js';
-import { renderMenuManagement } from './menu.js';
-import { renderContactPage } from './contact.js';
-import { renderHistory } from './history.js';
-import { renderCustomOrderPage } from './customOrder.js';
-import { renderLoginPage, renderSignupPage, injectAuthStyles } from './auth.js';
+import {
+  renderLiveOrders,
+  renderPreOrders,
+  liveOrders,
+  preOrders,
+  historyOrders,
+  preOrderHistory,
+} from "./orders.js";
+import { renderHome } from './home.js';
+
+import { renderMenuManagement } from "./menu.js";
+import { renderContactPage } from "./contact.js";
+import { renderHistory } from "./history.js";
+import { renderCustomOrderPage } from "./customOrder.js";
+import { renderLoginPage, renderSignupPage, injectAuthStyles } from "./auth.js";
+import { menuItems } from './menu.js'; // import from menu.js
+const availableItems = menuItems.filter(item => item.available).length;
+const unavailableItems = menuItems.filter(item => !item.available).length;
+
 
 
 export function setupNavigation() {
-  const contentBox = document.getElementById('content-box');
-  const pageTitle = document.getElementById('page-title');
-  const iconBox = document.getElementById('heading-icon');
+  const contentBox = document.getElementById("content-box");
+  const pageTitle = document.getElementById("page-title");
+  const iconBox = document.getElementById("heading-icon");
 
   const icons = {
-    home: 'icons/home-black.svg',
-    liveOrder: 'icons/order-black.svg',
-    preOrder: 'icons/order-black.svg',
-    history: 'icons/order-black.svg',
-    preManage: 'icons/manage-black.svg',
-    menu: 'icons/manage-black.svg',
-    delivery: 'icons/manage-black.svg',
-    contact: 'icons/contact-black.svg'
+    home: "icons/home-black.svg",
+    liveOrder: "icons/order-black.svg",
+    preOrder: "icons/order-black.svg",
+    history: "icons/order-black.svg",
+    preManage: "icons/manage-black.svg",
+    menu: "icons/manage-black.svg",
+    delivery: "icons/manage-black.svg",
+    contact: "icons/contact-black.svg",
   };
 
-  document.querySelectorAll('.nav-item').forEach(item => {
-    item.addEventListener('click', () => {
+  document.querySelectorAll(".nav-item").forEach((item) => {
+    item.addEventListener("click", () => {
       const page = item.dataset.page;
 
       switch (page) {
-        case 'liveOrder':
+        case "liveOrder":
           renderLiveOrders();
           break;
-        case 'preOrder':
+        case "preOrder":
           renderPreOrders();
           break;
-        case 'history':
+        case "history":
           renderHistory();
           break;
-        case 'menu':
+        case "menu":
           renderMenuManagement();
           break;
-        case 'contact':
+        case "contact":
           renderContactPage();
           break;
-        case 'customOrder':
+        case "customOrder":
           renderCustomOrderPage();
           break;
-        case 'login':
+        case "login":
           injectAuthStyles();
           renderLoginPage();
           break;
-        case 'signup':
+        case "signup":
           injectAuthStyles();
           renderSignupPage();
           break;
+        case "home": {
+          injectAuthStyles();
+          renderHome();
+          break;
+        }
         default:
           contentBox.innerHTML = `<h2>${item.textContent.trim()} Page</h2>`;
+          contentBox.classList.remove("dashboard-view");
+          break;
       }
 
-      pageTitle.textContent = (page === 'preManage' || page === 'menu' || page === 'delivery') 
-        ? `${item.textContent.trim()} Management` 
-        : item.textContent.trim();
+      pageTitle.textContent =
+        page === "preManage" || page === "menu" || page === "delivery"
+          ? `${item.textContent.trim()} Management`
+          : item.textContent.trim();
 
       if (icons[page]) {
         iconBox.style.backgroundImage = `url('${icons[page]}')`;
       }
 
-      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-      item.classList.add('active');
+      document
+        .querySelectorAll(".nav-item")
+        .forEach((i) => i.classList.remove("active"));
+      item.classList.add("active");
 
-      if (page === 'home' || page === 'contact') {
-        contentBox.style.background = '#fff';
-        contentBox.style.boxShadow = '0 2px 4px rgba(0,0,0,0.3)';
+      if (page === "home" || page === "contact") {
+        contentBox.style.background = "#fff";
+        contentBox.style.boxShadow = "0 2px 4px rgba(0,0,0,0.3)";
       } else {
-        contentBox.style.background = 'none';
-        contentBox.style.boxShadow = 'none';
+        contentBox.style.background = "none";
+        contentBox.style.boxShadow = "none";
       }
     });
   });

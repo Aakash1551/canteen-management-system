@@ -1,4 +1,5 @@
 import { openAddMenuModal, openEditMenuModal } from './modal.js';
+import { renderHome } from './home.js';
 
 let menuItems = [];
 
@@ -132,6 +133,9 @@ function renderMenuCards(searchTerm) {
       menuItems[index].available = !menuItems[index].available;
       saveMenuToStorage();
       renderMenuCards(searchTerm);
+      if (document.querySelector('.dashboard-view')) {
+      renderDashboard();
+}
     });
   });
 
@@ -179,3 +183,5 @@ function showDeleteConfirm(index, searchTerm) {
     modalRoot.innerHTML = '';
   });
 }
+export { menuItems };
+

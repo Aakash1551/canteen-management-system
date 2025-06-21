@@ -1,6 +1,7 @@
 // history.js
 import { historyOrders, preOrderHistory } from './orders.js';
-
+import { persistOrders } from './orders.js';
+persistOrders();
 export function renderHistory() {
   const liveHtml = historyOrders.map(order => `
     <div class="live-order-card">

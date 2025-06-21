@@ -112,5 +112,7 @@ export function injectAuthStyles() {
 
 // ✅ LOGIN SUCCESS HO TOH DASHBOARD CHALA DO
 export function handleLoginSuccess() {
+  localStorage.setItem('isLoggedIn', 'true'); // ✅ Mark user as logged in
   showDashboardAfterLogin();
 }
+
