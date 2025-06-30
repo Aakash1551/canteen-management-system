@@ -6,6 +6,7 @@ import {
   preOrders,
   historyOrders,
   preOrderHistory,
+  renderDeliveryManagement,
 } from "./orders.js";
 import { renderHome } from './home.js';
 
@@ -73,6 +74,10 @@ if (page !== "home") {
         case "signup":
           injectAuthStyles();
           renderSignupPage();
+          break;
+        case "delivery":
+          injectAuthStyles;
+          renderDeliveryManagement();
           break;
         case "home": {
           injectAuthStyles();
