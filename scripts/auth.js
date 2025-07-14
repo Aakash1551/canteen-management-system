@@ -71,13 +71,21 @@ export function injectAuthStyles() {
     .login-bg {
       background-image: url('/icons/login-bg.png');
     }
-    .signup-box, .login-box {
+    .signup-box {
       background: #ffeead;
       padding: 30px;
       border-radius: 10px;
       width: 300px;
       text-align: center;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+      .login-box {
+      background: transparent;
+      padding: 30px;
+      border-radius: 10px;
+      width: 300px;
+      text-align: center;
+      
     }
     .auth-input {
       width: 100%;

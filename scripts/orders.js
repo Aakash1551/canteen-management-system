@@ -73,7 +73,9 @@ function setupOrderDropdowns() {
       const details = arrow.parentElement.nextElementSibling;
       const isVisible = details.style.display === 'block';
       details.style.display = isVisible ? 'none' : 'block';
-      arrow.classList.toggle('open', !isVisible);
+      arrow.classList.toggle('fa-chevron-down');
+      arrow.classList.toggle('fa-chevron-up');
+
     });
   });
 }
@@ -150,7 +152,8 @@ export function renderLiveOrders() {
         <span><strong>Order ${order.orderNo}</strong></span>
         <span><strong>${order.price}</strong></span>
         <span class="btn-ready" data-order="${order.orderNo}">MARK AS READY</span>
-        <span class="dropdown-arrow">▼</span>
+       <i class="fas fa-chevron-down dropdown-arrow"></i>
+
       </div>
       <div class="live-order-details" style="display: none;">
         ${order.items.join('<br>')}
@@ -184,7 +187,7 @@ export function renderPreOrders() {
         <span><strong>Order ${order.orderNo}</strong></span>
         <span><strong>${order.price}</strong></span>
         <span class="btn-ready" data-order="${order.orderNo}">MARK AS READY</span>
-        <span class="dropdown-arrow">▼</span>
+        <i class="fas fa-chevron-down dropdown-arrow"></i>
       </div>
       <div class="live-order-details" style="display: none;">
         ${order.items.join('<br>')}

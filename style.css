@@ -190,7 +190,8 @@ a:hover {
   margin-left: 10px;
   white-space: nowrap;       /* ✅ Prevents wrapping */
   overflow: hidden;          /* ✅ Prevents spilling */
-  text-overflow: ellipsis;   /* ✅ Adds ... if it's too long */
+  text-overflow: ellipsis;
+  font-family: 'Kanit', sans-serif;   /* ✅ Adds ... if it's too long */
 }
 
 
@@ -220,17 +221,18 @@ a:hover {
 .live-order-card {
   width: 95%;
   background-color: white;
-  border-radius: 10px;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  padding: 15px 20px;
-  margin: 15px 0;
+  padding: 12px 10px;
+  margin: 1px 0;
+  font-family: 'Kanit', sans-serif; 
 }
 
 .live-order-header {
   display: flex;
   justify-content: space-between;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .live-order-items {
@@ -246,11 +248,13 @@ a:hover {
 }
 
 .btn-ready {
-  background-color: #FFD966;
+  background-color: #FFEA97; /* orange-ish */
+  color: #CA9607;
 }
 
 .btn-delivered {
-  background-color: #8DF59D;
+  background-color: #2ecc71; /* green */
+  color: white;
 }
 
 .btn-ready,
@@ -628,7 +632,8 @@ a:hover {
 .dashboard-welcome {
   width: 100%;
   text-align: center;
-  margin-bottom: 25px;
+  margin-top: 15px; 
+  margin-bottom: 35px;
 }
 
 .dashboard-welcome h2 {
@@ -738,32 +743,144 @@ a:hover {
   top: 52px;
   right: 0;
   background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   overflow: hidden;
-  min-width: 160px;
-  z-index: 999; /* ✅ sits above everything */
-  display: none;
+  min-width: 180px;
+  transform-origin: top right;
+  transform: scale(0.95);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  z-index: 999;
 }
 
-.profile-dropdown.hidden {
+.profile-dropdown.show {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: 52px;
+  right: 0;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  min-width: 160px;
+  padding: 10px 0;
   display: none;
+  z-index: 999;
 }
 
 .profile-dropdown.show {
   display: block;
 }
+
+.profile-dropdown {
+  position: absolute;
+  top: 52px;
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  min-width: 160px;
+  z-index: 999;
+  display: none;
+  padding: 8px 0;
+}
+
+.profile-dropdown.show {
+  display: block;
+}
+
+.profile-dropdown .dropdown-item {
+  padding: 10px 16px;
+  text-align: center;
+  font-size: 14px;
+  color: #333;
+  transition: background 0.2s ease;
+  cursor: pointer;
+}
+
+.profile-dropdown .dropdown-item:hover {
+  background-color: #f2f2f2;
+}
+
+
 body, html {
   height: 100%;
   overflow: auto;
 }
 body.home-page .content-box.dashboard-view {
-  height: auto;
-  min-height: 77vh; /* 👈 adjust this number as you want */
-  display: block;
+  height: calc(87vh - 10vh - 5px); /* 10vh = heading, 5px = buffer */
   overflow-y: auto;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: flex-start;
 }
+
+
+
+.dashboard-tip {
+  background: #FFF8E1;
+  color: #7F2E00;
+  font-size: 16px;
+  padding: 15px 20px;
+  border-left: 6px solid #FFD966;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 700px;
+  margin: 30px auto 10px auto;  /* 👈 centers and spaces from top */
+  text-align: center;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.profile-pic-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+#profile-pic-preview {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+}
+
+#profile-pic-upload {
+  font-size: 14px;
+}
+.dropdown-arrow {
+  cursor: pointer;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.dropdown-arrow i {
+  transition: transform 0.3s ease;
+}
+
+.dropdown-arrow.open i {
+  transform: rotate(180deg);
+}
+
+
 
 
 
