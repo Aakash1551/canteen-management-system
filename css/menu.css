@@ -1,0 +1,121 @@
+/* Category Heading */
+.menu-category {
+  width: 100%;
+  max-width: 1000px;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 30px 0 12px;
+  padding-left: 14px;
+  color: #1D1241;
+  border-left: 4px solid #1D1241;
+  background: #f4f4f4;
+  border-radius: 6px;
+}
+
+/* Menu Card */
+.menu-card {
+  width: 100%;
+  max-width: 1000px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  padding: 18px 20px;
+  margin: 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.menu-card:hover {
+  background: #f9fafb;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* Header inside card */
+.menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.menu-header span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Action Buttons */
+.menu-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.menu-actions button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Button Colors */
+.edit-btn {
+  background: #ffc107;
+  color: #212529;
+}
+.edit-btn:hover {
+  background: #e0a800;
+}
+
+.availability-btn {
+  color: white;
+}
+.availability-btn.available {
+  background-color: #28a745;
+}
+.availability-btn.unavailable {
+  background-color: #6c757d;
+}
+.availability-btn:hover {
+  opacity: 0.9;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+}
+.delete-btn:hover {
+  background-color: #c82333;
+}
+
+/* Arrow */
+.dropdown-arrow {
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  margin-left: 8px;
+}
+.dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+/* Responsive Layout */
+@media (max-width: 768px) {
+  .menu-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .menu-actions {
+    justify-content: flex-start;
+  }
+}

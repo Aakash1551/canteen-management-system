@@ -1,0 +1,44 @@
+/* === RESET & BASE === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  overflow: auto;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+a:hover {
+  color: black;
+}
+
+h2, h3 {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+:root {
+  --primary: #28a745;
+  --primary-hover: #218838;
+  --accent: #007bff;
+  --accent-hover: #0056b3;
+  --danger: #dc3545;
+  --bg-light: #f8f9fa;
+  --text-dark: #212529;
+  --border-radius: 8px;
+  --shadow-light: 0 2px 4px rgba(0,0,0,0.1);
+  --shadow-heavy: 0 4px 12px rgba(0,0,0,0.2);
+  --transition-fast: 0.2s ease;
+}

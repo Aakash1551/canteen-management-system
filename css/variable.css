@@ -1,0 +1,57 @@
+:root {
+  --primary: #28a745;
+  --primary-hover: #218838;
+  --accent: #007bff;
+  --accent-hover: #0056b3;
+  --danger: #dc3545;
+  --bg-light: #f8f9fa;
+  --text-dark: #212529;
+  --border-radius: 8px;
+  --shadow-light: 0 2px 4px rgba(0,0,0,0.1);
+  --shadow-heavy: 0 4px 12px rgba(0,0,0,0.2);
+  --transition-fast: 0.2s ease;
+}
+
+.primary-btn {
+  padding: 10px 28px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.primary-btn:hover {
+  background: var(--primary-hover);
+  transform: scale(1.02);
+}
+
+.primary-btn:active {
+  transform: scale(0.98);
+}
+
+.primary-btn.danger {
+  background: var(--danger);
+}
+
+.primary-btn.danger:hover {
+  background: #bd2130;
+}
+
+.input-styled {
+  width: 100%;
+  padding: 10px 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border var(--transition-fast);
+}
+
+.input-styled:focus {
+  outline: none;
+  border-color: var(--accent);
+}

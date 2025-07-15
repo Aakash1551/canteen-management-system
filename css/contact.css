@@ -1,0 +1,92 @@
+/* === CONTACT PAGE === */
+
+.contact-card {
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+  padding: 40px 20px;
+  background-color: transparent;
+}
+
+.contact-title {
+  font-size: 34px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #1D1241;
+  letter-spacing: 0.5px;
+}
+
+.contact-subtext {
+  font-size: 18px;
+  color: #666;
+  margin-bottom: 30px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.contact-info-box {
+  display: inline-block;
+  text-align: left;
+  font-size: 17px;
+  line-height: 1.7;
+  color: #333;
+  background: #fff;
+  padding: 24px 32px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  max-width: 480px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-info-box:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+}
+
+.contact-info-box p {
+  margin: 12px 0;
+  font-size: 16px;
+}
+
+.label {
+  font-weight: 600;
+}
+
+.label.phone {
+  color: #d63384;
+}
+
+.label.email {
+  color: #6f42c1;
+}
+
+.label.address {
+  color: #e83e8c;
+}
+
+.contact-note {
+  margin-top: 30px;
+  font-size: 16px;
+  color: #777;
+  font-style: italic;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .contact-info-box {
+    padding: 20px;
+    width: 100%;
+    margin: 0 10px;
+  }
+
+  .contact-title {
+    font-size: 28px;
+  }
+
+  .contact-subtext {
+    font-size: 16px;
+  }
+}

@@ -1,0 +1,137 @@
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* Modal Box */
+.modal-box-styled {
+  position: relative;
+  background: #fff;
+  border-radius: 16px;
+  padding: 40px 40px 80px 40px;
+  max-width: 700px;
+  width: 90%;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* Form Layout */
+.modal-content-styled {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+}
+
+.modal-left,
+.modal-right {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Inputs */
+.input-styled,
+.textarea-styled {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: border-color 0.3s ease;
+  background: #fff;
+}
+
+.input-styled:focus,
+.textarea-styled:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.textarea-styled {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Category Toggle (radio/checkbox row) */
+.category-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 15px;
+}
+
+/* Save Button */
+.modal-save-styled {
+  position: absolute;
+  bottom: 24px;
+  right: 40px;
+  padding: 12px 26px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.modal-save-styled:hover {
+  background: var(--primary-hover);
+  transform: scale(1.03);
+}
+
+.modal-save-styled:active {
+  transform: scale(0.96);
+}
+
+/* Close Button (X) */
+.modal-close-styled {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #888;
+  transition: color 0.3s ease;
+}
+
+.modal-close-styled:hover {
+  color: #000;
+}
+
+/* Image Upload */
+.image-upload-box {
+  border: 2px dashed #bbb;
+  border-radius: 10px;
+  text-align: center;
+  padding: 40px;
+  color: #888;
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.3s, color 0.3s, box-shadow 0.3s;
+}
+
+.image-upload-box:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .modal-content-styled {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-save-styled {
+    bottom: 20px;
+    right: 20px;
+  }
+}

@@ -1,20 +1,22 @@
-// contact.js
-
 export function renderContactPage() {
   document.getElementById('content-box').innerHTML = `
-    <div class="contact-container" style="padding: 30px; text-align: center;">
-      <h2 style="font-size: 32px;">Contact Us</h2>
-      <p style="font-size: 18px; color: #555;">
+    <div class="contact-card">
+      <h2 class="contact-title">Contact Us</h2>
+
+      <p class="contact-subtext">
         Have questions, feedback, or need assistance? Our team is here to help you!
       </p>
-      <div style="display: inline-block; text-align: left; font-size: 18px; line-height: 1.6; color: #333;">
-        <p><strong>Phone:</strong> +91 98765 43210</p>
-        <p><strong>Email:</strong> support@example.com</p>
-        <p><strong>Address:</strong> 123, Your Street, Your City, India</p>
+
+      <div class="contact-info-box">
+        <p><span class="label phone">📞 Phone:</span> +91 98765 43210</p>
+        <p><span class="label email">✉️ Email:</span> support@example.com</p>
+        <p><span class="label address">📍 Address:</span> 123, Your Street, Your City, India</p>
       </div>
-      <p style="margin-top: 20px; font-size: 16px; color: #666;">
+
+      <p class="contact-note">
         We’re available 24/7. Your satisfaction is our priority!
       </p>
     </div>
   `;
 }
+

@@ -1,30 +1,10 @@
-// customOrder.js — FINAL with Confirm modal fix
 import { loadMenuItems } from './menu.js';
 import { liveOrders, preOrders, renderLiveOrders, renderPreOrders } from './orders.js';
 import { persistOrders } from './orders.js';
 
 let customCart = [];
 
-function injectCustomStyles() {
-  if (document.getElementById('custom-order-styles')) return;
-
-  const style = document.createElement('style');
-  style.id = 'custom-order-styles';
-  style.textContent = `
-    .menu-card-fixed { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; background: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 10px; width: 100%; max-width: 700px; gap: 10px; }
-    .menu-info { font-weight: bold; font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-grow: 1; }
-    .qty-controls { display: flex; align-items: center; gap: 6px; }
-    .qty-controls button { padding: 4px 10px; border: none; border-radius: 4px; background: #007bff; color: #fff; cursor: pointer; }
-    .qty-controls .qty-number { min-width: 20px; text-align: center; font-weight: bold; }
-    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 999; }
-    .modal-box-styled { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); max-width: 400px; width: 90%; position: relative; }
-    .modal-close-styled { position: absolute; top: 8px; right: 12px; background: none; border: none; font-size: 20px; cursor: pointer; }
-  `;
-  document.head.appendChild(style);
-}
-
 export function renderCustomOrderPage() {
-  injectCustomStyles();
   customCart = [];
 
   document.getElementById('content-box').innerHTML = `
@@ -51,7 +31,6 @@ export function renderCustomOrderPage() {
 }
 
 function renderCustomOrderMenu(orderType, customerId) {
-  injectCustomStyles();
   loadMenuItems();
   const items = JSON.parse(localStorage.getItem('menuItems')) || [];
 
@@ -223,7 +202,6 @@ function showOrderSummaryModal(order, orderType) {
 
     persistOrders();
 
-    // ✅ FIX: Close the modal
     modalRoot.innerHTML = '';
   });
 }

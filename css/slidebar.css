@@ -1,0 +1,143 @@
+/* === SIDEBAR === */
+.box {
+  display: flex;
+  width: 100%;
+  height: 8vh;
+  padding: 12%;
+  color: white;
+  justify-content: flex-start;
+  align-items: center;
+  cursor: pointer;
+}
+
+.box2 {
+  width: 100%;
+  height: 50vh;
+  margin-top: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  color: white;
+}
+
+.box:hover,
+.box:active,
+.box.active,
+.dropdown-item.active {
+  background-color: #E7D7FF;
+  color: black;
+}
+
+.box:hover .icon,
+.box:active .icon,
+.box.active .icon,
+.dropdown-item.active .icon {
+  filter: brightness(0) saturate(100%) invert(0);
+}
+
+.text {
+  font-size: 20px;
+  margin-left: 10%;
+  color: inherit;
+}
+
+.icon {
+  width: 30px;
+  height: 30px;
+  background-size: cover;
+  display: inline-block;
+}
+
+.icon1 { background-image: url('icons/home-white.svg'); }
+.icon2 { background-image: url('icons/order-white.svg'); }
+.icon3 { background-image: url('icons/manage-white.svg'); }
+.icon4 { background-image: url('icons/contact-white.svg'); }
+.icon5 {
+  background-image: url('icons/home-black.svg');
+  position: relative;
+  margin-left: 70px;
+  width: 30px;
+  height: 30px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  flex-direction: column;
+  background-color: #1D1241;
+  width: 100%;
+}
+
+.dropdown-item {
+  padding: 10px 0;
+  width: 100%;
+  text-align: center;
+  border-bottom: 2px solid #E7D7FF;
+  color: white;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #E7D7FF;
+  color: black;
+}
+
+.arrow {
+  margin-left: auto;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid white;
+  transition: transform 0.3s ease;
+}
+
+.arrow.rotate {
+  transform: rotate(180deg);
+}
+
+.arrow.black,
+.box:hover .arrow,
+.dropdown-item:hover .arrow {
+  border-top-color: white;
+}
+
+.profile-wrapper {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  z-index: 10;
+}
+
+.top-profile-pic {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+  cursor: pointer;
+  position: relative;
+  z-index: 11;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: 52px;
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  min-width: 160px;
+  z-index: 999;
+  display: none;
+}
+
+.profile-dropdown.show {
+  display: block;
+}
