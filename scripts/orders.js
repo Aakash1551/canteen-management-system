@@ -17,7 +17,7 @@ export let preOrderHistory = loadOrderList('preOrderHistory');
 
 // ✅ One-time Dummy Data Generator
 if (!localStorage.getItem('preOrders') || !localStorage.getItem('liveOrders')) {
-console.log("🧪 Adding dummy orders now");
+  console.log("🧪 Adding dummy orders now");
   const randomTime = () => {
     const hour = Math.floor(Math.random() * 12) + 1;
     const minute = Math.floor(Math.random() * 60);
@@ -59,14 +59,12 @@ export function persistOrders() {
   saveOrderList('deliveryOrders', deliveryOrders);
 }
 
-// ✅ Clear delivery only
 export function clearDeliveryOrders() {
   deliveryOrders.length = 0;
   saveOrderList('deliveryOrders', deliveryOrders);
   console.log("✅ deliveryOrders cleared.");
 }
 
-// ✅ Toggle Dropdown
 function setupOrderDropdowns() {
   document.querySelectorAll('.dropdown-arrow').forEach(arrow => {
     arrow.addEventListener('click', () => {
@@ -75,12 +73,10 @@ function setupOrderDropdowns() {
       details.style.display = isVisible ? 'none' : 'block';
       arrow.classList.toggle('fa-chevron-down');
       arrow.classList.toggle('fa-chevron-up');
-
     });
   });
 }
 
-// ✅ Button: Delivered
 export function setupDeliveredButtons(type) {
   const selector = type === 'live' ? '.live-delivered' : '.pre-delivered';
   document.querySelectorAll(selector).forEach(btn => {
@@ -90,52 +86,75 @@ export function setupDeliveredButtons(type) {
       const history = type === 'live' ? historyOrders : preOrderHistory;
       const index = list.findIndex(o => o.orderNo === orderNo);
       if (index !== -1) {
-        history.push(list[index]);
-        list.splice(index, 1);
-        persistOrders();
-        type === 'live' ? renderLiveOrders() : renderPreOrders();
+        btn.disabled = true;
+        btn.innerHTML = `<span class="spinner"></span> Sending...`;
+
+        const card = btn.closest(".live-order-card");
+        if (card) {
+          card.classList.add("order-card-exit");
+          card.addEventListener("animationend", () => {
+            history.push(list[index]);
+            list.splice(index, 1);
+            persistOrders();
+            type === 'live' ? renderLiveOrders() : renderPreOrders();
+          });
+        }
       }
     });
   });
 }
 
-// ✅ Button: Mark as Ready (send to delivery)
 export function setupReadyButtons(type) {
   const selector = type === 'live' ? '.btn-ready:not(.used)' : '.btn-ready:not(.used)';
   document.querySelectorAll(selector).forEach(btn => {
     btn.addEventListener('click', () => {
       const orderNo = btn.dataset.order;
       const sourceList = type === 'live' ? liveOrders : preOrders;
-      const index = sourceList.findIndex(o => o.orderNo === orderNo);
-      if (index !== -1) {
-        const order = sourceList[index];
-        deliveryOrders.push(order);
-        sourceList.splice(index, 1);
-        persistOrders();
-        type === 'live' ? renderLiveOrders() : renderPreOrders();
-      }
+
+      btn.disabled = true; // still disable to prevent double-click
+      const card = btn.closest(".live-order-card");
+      card.classList.add("order-card-exit");
+
+      card.addEventListener("animationend", () => {
+        const index = sourceList.findIndex(o => o.orderNo === orderNo);
+        if (index !== -1) {
+          const order = sourceList[index];
+          deliveryOrders.push(order);
+          sourceList.splice(index, 1);
+          persistOrders();
+          card.remove(); // ✅ Just remove the one card
+        }
+      });
     });
   });
 }
+
+
 
 function setupDeliveredFromDelivery() {
   document.querySelectorAll('.delivery-delivered').forEach(btn => {
     btn.addEventListener('click', () => {
       const orderNo = btn.dataset.order;
-      const index = deliveryOrders.findIndex(o => o.orderNo === orderNo);
-      if (index !== -1) {
-        const order = deliveryOrders[index];
-        historyOrders.push(order);              // ✅ Move to history
-        deliveryOrders.splice(index, 1);        // ❌ Remove from delivery
-        persistOrders();                        // 💾 Save
-        renderDeliveryManagement();             // 🔄 Refresh UI
-        console.log(`✅ Order ${orderNo} marked as delivered`);
-      }
+      btn.disabled = true;
+
+      const card = btn.closest(".live-order-card");
+      card.classList.add("order-card-exit");
+
+      card.addEventListener("animationend", () => {
+        const index = deliveryOrders.findIndex(o => o.orderNo === orderNo);
+        if (index !== -1) {
+          const order = deliveryOrders[index];
+          historyOrders.push(order);
+          deliveryOrders.splice(index, 1);
+          persistOrders();
+          card.remove(); // ✅ Only the clicked one
+        }
+      });
     });
   });
 }
 
-// ✅ Render: Live Orders
+
 export function renderLiveOrders() {
   const contentBox = document.getElementById('content-box');
   contentBox.className = 'content-box';
@@ -146,14 +165,13 @@ export function renderLiveOrders() {
   contentBox.style.padding = '10px';
 
   const html = liveOrders.map(order => `
-    <div class="live-order-card">
+    <div class="live-order-card fade-in">
       <div class="live-order-header">
         <span><strong>${order.name}</strong></span>
         <span><strong>Order ${order.orderNo}</strong></span>
         <span><strong>${order.price}</strong></span>
         <span class="btn-ready" data-order="${order.orderNo}">MARK AS READY</span>
-       <i class="fas fa-chevron-down dropdown-arrow"></i>
-
+        <i class="fas fa-chevron-down dropdown-arrow"></i>
       </div>
       <div class="live-order-details" style="display: none;">
         ${order.items.join('<br>')}
@@ -170,7 +188,6 @@ export function renderLiveOrders() {
   setupReadyButtons('live');
 }
 
-// ✅ Render: Pre Orders
 export function renderPreOrders() {
   const contentBox = document.getElementById('content-box');
   contentBox.className = 'content-box';
@@ -181,7 +198,7 @@ export function renderPreOrders() {
   contentBox.style.padding = '10px';
 
   const html = preOrders.map(order => `
-    <div class="live-order-card">
+    <div class="live-order-card fade-in">
       <div class="live-order-header">
         <span><strong>${order.name}</strong></span>
         <span><strong>Order ${order.orderNo}</strong></span>
@@ -205,7 +222,6 @@ export function renderPreOrders() {
   setupReadyButtons('pre');
 }
 
-// ✅ Render: Delivery Page
 export function renderDeliveryManagement() {
   const contentBox = document.getElementById('content-box');
   contentBox.className = 'content-box';
@@ -213,7 +229,7 @@ export function renderDeliveryManagement() {
     <div class="live-orders-container">
       <h2>🚚 Delivery Orders</h2>
       ${deliveryOrders.map(order => `
-        <div class="live-order-card">
+        <div class="live-order-card fade-in">
           <div class="live-order-header">
             <span><strong>${order.name}</strong></span>
             <span><strong>${order.orderNo}</strong></span>
@@ -227,7 +243,5 @@ export function renderDeliveryManagement() {
       `).join('') || "<p>No delivery orders yet.</p>"}
     </div>
   `;
-  setupDeliveredFromDelivery(); // ✅ Activate delivery buttons
-
+  setupDeliveredFromDelivery();
 }
-

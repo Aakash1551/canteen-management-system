@@ -1,4 +1,3 @@
-// navigation.js
 import {
   renderLiveOrders,
   renderPreOrders,
@@ -8,18 +7,17 @@ import {
   preOrderHistory,
   renderDeliveryManagement,
 } from "./orders.js";
-import { renderHome } from './home.js';
 
+import { renderHome } from './home.js';
 import { renderMenuManagement } from "./menu.js";
 import { renderContactPage } from "./contact.js";
 import { renderHistory } from "./history.js";
 import { renderCustomOrderPage } from "./customOrder.js";
 import { renderLoginPage, renderSignupPage, injectAuthStyles } from "./auth.js";
-import { menuItems } from './menu.js'; // import from menu.js
+import { menuItems } from './menu.js';
+
 const availableItems = menuItems.filter(item => item.available).length;
 const unavailableItems = menuItems.filter(item => !item.available).length;
-
-
 
 export function setupNavigation() {
   const contentBox = document.getElementById("content-box");
@@ -40,14 +38,25 @@ export function setupNavigation() {
   document.querySelectorAll(".nav-item").forEach((item) => {
     item.addEventListener("click", () => {
       const page = item.dataset.page;
+
       // 🧹 Remove profile-wrapper if not on Home page
-      
-if (page !== "home") {
-  const oldProfile = document.querySelector(".profile-wrapper");
-  if (oldProfile) oldProfile.remove();
-}
+      if (page !== "home") {
+        const oldProfile = document.querySelector(".profile-wrapper");
+        if (oldProfile) oldProfile.remove();
+      }
 
+      // 🔻 Collapse all open dropdowns
+      document.querySelectorAll(".dropdown-content").forEach(dropdown => {
+        dropdown.style.display = "none";
+      });
+      document.querySelectorAll(".dropdown-toggle").forEach(toggle => {
+        toggle.setAttribute("aria-expanded", "false");
+      });
+      document.querySelectorAll(".dropdown-toggle .arrow").forEach(arrow => {
+        arrow.classList.remove("rotated"); // Assuming you rotate arrow with this class
+      });
 
+      // 🧭 Route handling
       switch (page) {
         case "liveOrder":
           renderLiveOrders();
@@ -76,14 +85,12 @@ if (page !== "home") {
           renderSignupPage();
           break;
         case "delivery":
-          injectAuthStyles;
           renderDeliveryManagement();
           break;
-        case "home": {
+        case "home":
           injectAuthStyles();
           renderHome();
           break;
-        }
         default:
           contentBox.innerHTML = `<h2>${item.textContent.trim()} Page</h2>`;
           contentBox.classList.remove("dashboard-view");
@@ -99,9 +106,7 @@ if (page !== "home") {
         iconBox.style.backgroundImage = `url('${icons[page]}')`;
       }
 
-      document
-        .querySelectorAll(".nav-item")
-        .forEach((i) => i.classList.remove("active"));
+      document.querySelectorAll(".nav-item").forEach(i => i.classList.remove("active"));
       item.classList.add("active");
 
       if (page === "home" || page === "contact") {

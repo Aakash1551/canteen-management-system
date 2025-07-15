@@ -8,6 +8,7 @@ import { openAddMenuModal, openEditMenuModal } from './modal.js';
 // Run on page load
 window.addEventListener('DOMContentLoaded', () => {
   injectAuthStyles();
+console.log('Lucide available?', typeof lucide); // should log "object"
 
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
@@ -15,6 +16,16 @@ window.addEventListener('DOMContentLoaded', () => {
     showDashboardAfterLogin();  // ✅ skip login screen
   } else {
     renderLoginPage();
+    if (window.lucide && typeof lucide.createIcons === 'function') {
+  lucide.createIcons();
+} else {
+  // Try again after short delay (fallback)
+  setTimeout(() => {
+    if (window.lucide) lucide.createIcons();
+  }, 50);
+}
+
+
   }
 });
 

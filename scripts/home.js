@@ -187,5 +187,38 @@ document.querySelector(".modal-overlay").addEventListener("click", (e) => {
   </div>
     </div>
   `;
+  // 🔗 Make dashboard cards clickable
+document.querySelectorAll(".dashboard-card").forEach((card) => {
+  const title = card.querySelector("h3")?.textContent?.toLowerCase();
+
+  let targetPage = null;
+
+  switch (title) {
+    case "live orders":
+      targetPage = "liveOrder";
+      break;
+    case "pre orders":
+      targetPage = "preOrder";
+      break;
+    case "history orders":
+      targetPage = "history";
+      break;
+    case "pre-order history":
+      targetPage = "history"; // or a different page if needed
+      break;
+    case "available menu items":
+    case "unavailable items":
+      targetPage = "menu";
+      break;
+  }
+
+  if (targetPage) {
+    card.style.cursor = "pointer";
+    card.addEventListener("click", () => {
+      document.querySelector(`.nav-item[data-page="${targetPage}"]`)?.click();
+    });
+  }
+});
+
 
 }

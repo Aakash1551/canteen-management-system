@@ -5,9 +5,19 @@
   box-sizing: border-box;
 }
 
+
+html, body {
+  height: 100%;
+  
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+
 body {
   font-family: sans-serif;
-  background-color: #d9d9d9;
+  background-color: #ffffff;
 }
 
 .container {
@@ -879,6 +889,49 @@ body.home-page .content-box.dashboard-view {
 .dropdown-arrow.open i {
   transform: rotate(180deg);
 }
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid #20c997;
+  border-top-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  animation: spin 0.6s linear infinite;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.live-order-card {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeSlideUp 0.4s ease forwards;
+}
+
+@keyframes fadeSlideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.order-card-exit {
+  animation: cardFadeOut 0.5s ease forwards;
+}
+
+@keyframes cardFadeOut {
+  to {
+    opacity: 0;
+    transform: translateX(30px);
+    height: 0;
+    margin: 0;
+    padding: 0;
+  }
+}
+
 
 
 
