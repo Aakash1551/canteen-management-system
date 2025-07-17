@@ -1,3 +1,4 @@
+/* === Custom Order Wrapper === */
 .custom-order-wrapper {
   background: #fff;
   padding: 30px 40px;
@@ -21,6 +22,7 @@
   font-size: 16px;
 }
 
+/* === Menu Card Fixed === */
 .menu-card-fixed {
   display: flex;
   justify-content: space-between;
@@ -40,6 +42,7 @@
   background: #f1f1f1;
 }
 
+/* === Menu Info === */
 .menu-info {
   font-weight: bold;
   font-size: 16px;
@@ -49,6 +52,7 @@
   flex-grow: 1;
 }
 
+/* === Quantity Controls === */
 .qty-controls {
   display: flex;
   align-items: center;
@@ -75,6 +79,28 @@
   font-weight: bold;
 }
 
+/* === Add to Cart Button === */
+.add-cart-btn-fixed {
+  padding: 6px 14px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--transition-fast);
+}
+
+.add-cart-btn-fixed:hover {
+  background: #0056b3;
+}
+
+/* === Added State === */
+.added {
+  background: #d4edda !important;
+}
+
+/* === Cart Summary (Sticky Footer) === */
 .cart-summary {
   position: sticky;
   bottom: 0;
@@ -85,7 +111,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 20px;
+  padding: 10px 20px;
   font-weight: bold;
   z-index: 1000;
   box-shadow: var(--shadow-light);

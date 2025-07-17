@@ -68,11 +68,11 @@ if (page !== "home") {
           renderCustomOrderPage();
           break;
         case "login":
-          injectAuthStyles();
+          // injectAuthStyles();
           renderLoginPage();
           break;
         case "signup":
-          injectAuthStyles();
+          // injectAuthStyles();
           renderSignupPage();
           break;
         case "delivery":

@@ -141,3 +141,30 @@
 .profile-dropdown.show {
   display: block;
 }
+
+/* Add these new classes */
+.signup-bg {
+  background-image: url('/icons/signup-bg.png');
+}
+
+.login-bg {
+  background-image: url('/icons/login-bg.png');
+}
+
+.auth-bg {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100%;
+  width: 100%;
+}
+
+.icon-login::before {
+  content: "🔐";
+  font-size: 18px;
+}
+
+.icon-signup::before {
+  content: "📝";
+  font-size: 18px;
+}

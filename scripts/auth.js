@@ -1,118 +1,117 @@
-import { showDashboardAfterLogin } from './main.js';
+import { showDashboardAfterLogin } from "./main.js";
+
+// ✅ On Login Success
+export function handleLoginSuccess() {
+  localStorage.setItem("isLoggedIn", "true");
+  showDashboardAfterLogin();
+}
+
+export function injectAuthStyles() {
+  const style = document.createElement("link");
+  style.rel = "stylesheet";
+  style.href = "css/login.css"; // ✅ Make sure this file exists
+  document.head.appendChild(style);
+}
 
 // 🔐 SIGNUP PAGE
 export function renderSignupPage() {
-  document.getElementById('auth-screen').innerHTML = `
+  document.getElementById("auth-screen").innerHTML = `
     <div class="auth-bg signup-bg">
       <div class="signup-box">
-        <input class="auth-input" type="text" placeholder="Username\\E-Mail" />
+        <h2>Create Account</h2>
+
+        <input class="auth-input" type="text" placeholder="Username / E-Mail" />
         <input class="auth-input" type="password" placeholder="Password" />
         <input class="auth-input" type="password" placeholder="Confirm Password" />
-        <p class="switch-text">Already have an account? <a href="#" id="gotoLogin">Login</a></p>
-        <button class="auth-btn">Sign up</button>
+
+        <button class="auth-btn" id="signup-btn">Sign up</button>
+
+        <p class="switch-text">
+          Already have an account? <a href="#" id="gotoLogin">Login</a>
+        </p>
       </div>
     </div>
   `;
 
-  document.getElementById('gotoLogin').addEventListener('click', (e) => {
+  document.getElementById("gotoLogin").addEventListener("click", (e) => {
     e.preventDefault();
     renderLoginPage();
   });
 
-  document.querySelector('.auth-btn').addEventListener('click', () => {
-    // Normally you'd do validation here
-    handleLoginSuccess();
+  document.getElementById("signup-btn").addEventListener("click", () => {
+    handleLoginSuccess(); // Replace with validation logic later
   });
 }
 
 // 🔐 LOGIN PAGE
 export function renderLoginPage() {
-  document.getElementById('auth-screen').innerHTML = `
-    <div class="auth-bg login-bg">
-      <div class="login-box">
-        <input class="auth-input" type="text" placeholder="Username\\E-Mail" />
-        <input class="auth-input" type="password" placeholder="Password" />
-        <p class="switch-text">Don't have an account? <a href="#" id="gotoSignup">Sign up</a></p>
-        <button class="auth-btn">Login</button>
+  document.getElementById("auth-screen").innerHTML = `
+    <div class="login-container">
+      <div class="login-left-wrapper">
+        <div class="login-left"></div>
+      </div>
+
+      <div class="login-right">
+        <div class="login-box">
+          <h2>Login</h2>
+
+          <div class="input-group">
+            <label for="login-email">Mail / Username</label>
+            <div class="input-icon">
+              <i data-lucide="mail"></i>
+              <div class="divider"></div>
+              <input type="text" id="login-email" placeholder="Enter username" />
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="login-password">Password</label>
+            <div class="input-icon">
+              <i data-lucide="lock"></i>
+              <div class="divider"></div>
+              <input type="password" id="login-password" placeholder="Enter password" />
+              <span class="eye-toggle" style="cursor: pointer; display: flex;">
+                <i data-lucide="eye" class="eye-icon show-eye"></i>
+                <i data-lucide="eye-off" class="eye-icon hide-eye" style="display: none;"></i>
+              </span>
+            </div>
+          </div>
+
+          <a href="#" class="forgot-password">Forgot Password?</a>
+          <button class="auth-btn" id="login-btn">Log In</button>
+
+          <div class="signup-link">
+            Don’t have an account? <a href="#" id="gotoSignup">Sign up here</a>
+          </div>
+        </div>
       </div>
     </div>
   `;
 
-  document.getElementById('gotoSignup').addEventListener('click', (e) => {
+  // ✅ Render icons
+  if (window.lucide) lucide.createIcons();
+
+  // 👁 Toggle password visibility
+  const passwordInput = document.getElementById("login-password");
+  const eyeToggle = document.querySelector(".eye-toggle");
+
+  if (passwordInput && eyeToggle) {
+    eyeToggle.addEventListener("click", () => {
+      const isVisible = passwordInput.type === "text";
+      passwordInput.type = isVisible ? "password" : "text";
+      eyeToggle.querySelector(".show-eye").style.display = isVisible ? "block" : "none";
+      eyeToggle.querySelector(".hide-eye").style.display = isVisible ? "none" : "block";
+    });
+  }
+
+  // 🔘 Login button
+  document.getElementById("login-btn").addEventListener("click", () => {
+    handleLoginSuccess(); // Replace with auth logic later
+  });
+
+  // 🔁 Switch to Signup
+  document.getElementById("gotoSignup").addEventListener("click", (e) => {
     e.preventDefault();
     renderSignupPage();
   });
-
-  document.querySelector('.auth-btn').addEventListener('click', () => {
-    // Normally you'd do validation here
-    handleLoginSuccess();
-  });
 }
-
-// 🧠 STYLES INJECTION
-export function injectAuthStyles() {
-  if (document.getElementById('auth-style')) return;
-  const style = document.createElement('style');
-  style.id = 'auth-style';
-  style.textContent = `
-    .auth-bg {
-      width: 100%;
-      height: 100vh;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .signup-bg {
-      background-image: url('/icons/signup-bg.png');
-    }
-    .login-bg {
-      background-image: url('/icons/login-bg.png');
-    }
-    .signup-box, .login-box {
-      background: #ffeead;
-      padding: 30px;
-      border-radius: 10px;
-      width: 300px;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-    .auth-input {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 6px;
-      border: none;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    }
-    .auth-btn {
-      margin-top: 10px;
-      padding: 10px 20px;
-      background: #2ecc71;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    .switch-text {
-      font-size: 13px;
-      margin: 10px 0;
-      color: #333;
-    }
-    .switch-text a {
-      color: #2980b9;
-      text-decoration: none;
-    }
-  `;
-  document.head.appendChild(style);
-}
-
-// ✅ LOGIN SUCCESS HO TOH DASHBOARD CHALA DO
-export function handleLoginSuccess() {
-  localStorage.setItem('isLoggedIn', 'true'); // ✅ Mark user as logged in
-  showDashboardAfterLogin();
-}
-

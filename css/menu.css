@@ -107,6 +107,24 @@
   transform: rotate(180deg);
 }
 
+
+/* UPDATE existing .dropdown-arrow */
+.dropdown-arrow {
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  margin-left: 8px;
+  display: inline-block; /* NEW */
+}
+
+.dropdown-arrow i {
+  transition: transform 0.3s ease; /* NEW */
+}
+
+.dropdown-arrow.open i {
+  transform: rotate(180deg); /* NEW */
+}
+
 /* Responsive Layout */
 @media (max-width: 768px) {
   .menu-header {

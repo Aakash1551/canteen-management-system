@@ -42,3 +42,29 @@ h2, h3 {
   --shadow-heavy: 0 4px 12px rgba(0,0,0,0.2);
   --transition-fast: 0.2s ease;
 }
+
+/* Update the html, body section */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* NEW: prevents scrolling issues */
+}
+
+body {
+  font-family: sans-serif; /* CHANGED: from 'Segoe UI' to sans-serif */
+  background-color: #ffffff; /* CHANGED: from var(--bg-light) to #ffffff */
+  color: var(--text-dark);
+}
+
+/* NEW: Add these classes at the end */
+body.home-page .content-box.dashboard-view {
+  height: calc(87vh - 10vh - 5px);
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: flex-start;
+}

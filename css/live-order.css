@@ -91,6 +91,56 @@
   transform: scale(1.03);
 }
 
+/* ADD to existing .live-order-card */
+.live-order-card {
+  /* ... existing styles ... */
+  font-family: 'Kanit', sans-serif; /* NEW */
+  opacity: 0; /* NEW: for animation */
+  transform: translateY(20px); /* NEW: for animation */
+  animation: fadeSlideUp 0.4s ease forwards; /* NEW */
+}
+
+/* ADD new classes */
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid #20c997;
+  border-top-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  animation: spin 0.6s linear infinite;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+.order-card-exit {
+  animation: cardFadeOut 0.5s ease forwards;
+}
+
+/* ADD new animations */
+@keyframes fadeSlideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cardFadeOut {
+  to {
+    opacity: 0;
+    transform: translateX(30px);
+    height: 0;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Responsive */
 @media (max-width: 600px) {
   .live-order-card {

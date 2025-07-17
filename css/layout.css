@@ -1,8 +1,9 @@
-/* === LAYOUT === */
+/* === MAIN LAYOUT === */
 .container {
   display: flex;
 }
 
+/* === SIDEBAR (hero) === */
 .hero {
   width: 20vw;
   height: 100vh;
@@ -13,6 +14,7 @@
   align-items: center;
 }
 
+/* === MAIN CONTENT AREA === */
 .main {
   width: 80vw;
   height: 100vh;
@@ -24,6 +26,7 @@
   justify-content: space-between;
 }
 
+/* === CONTENT BOX === */
 .content-box {
   height: calc(100vh - 10vh - 20px);
   overflow-y: auto;
@@ -37,6 +40,7 @@
   padding: 10px;
 }
 
+/* === CONTENT BOX OVERRIDE for Dashboard View === */
 .content-box.dashboard-view {
   flex: unset;
   height: auto;
@@ -45,6 +49,7 @@
   display: block;
 }
 
+/* === CONTENT BOX for Home Page Dashboard === */
 body.home-page .content-box.dashboard-view {
   height: auto;
   min-height: 77vh;
@@ -53,6 +58,7 @@ body.home-page .content-box.dashboard-view {
   padding: 20px;
 }
 
+/* === HEADING BOX === */
 .heading-box {
   width: 90%;
   height: 10vh;
@@ -66,12 +72,7 @@ body.home-page .content-box.dashboard-view {
   position: relative;
 }
 
-.heading-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
+/* === HEADING TEXT STYLE === */
 .text1 {
   font-size: 25px;
   color: black;
@@ -79,12 +80,12 @@ body.home-page .content-box.dashboard-view {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-family: 'Kanit', sans-serif; /* Stylish font */
 }
 
-.profile-pic {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  object-fit: cover;
+/* === HEADING LEFT SIDE ALIGNMENT === */
+.heading-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-
