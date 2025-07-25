@@ -2,7 +2,6 @@ import { openAddMenuModal, openEditMenuModal } from './modal.js';
 import { renderHome } from './home.js';
 
 let menuItems = [];
-
 // Load from localStorage or set default + save
 const storedMenu = localStorage.getItem('menuItems');
 if (storedMenu) {

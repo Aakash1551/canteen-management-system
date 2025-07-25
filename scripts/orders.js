@@ -20,7 +20,6 @@ export let preOrderHistory = loadOrderList('preOrderHistory');
 
 // ✅ One-time Dummy Data Generator (if localStorage is empty)
 if (!localStorage.getItem('preOrders') || !localStorage.getItem('liveOrders')) {
-  console.log("🧪 Adding dummy orders now");
   const randomTime = () => {
     const hour = Math.floor(Math.random() * 12) + 1;
     const minute = Math.floor(Math.random() * 60);
@@ -188,7 +187,7 @@ function setupDeliveredFromDelivery() {
 export function renderLiveOrders() {
   const contentBox = document.getElementById('content-box');
   // Add unique ID for highest specificity in CSS
-  contentBox.id = 'live-pre-order-content-box';
+  // contentBox.id = 'live-pre-order-content-box';
   contentBox.className = 'content-box'; // Keep existing class for general layout
   contentBox.style.display = 'flex';
   contentBox.style.flexDirection = 'column';
@@ -232,8 +231,6 @@ export function renderLiveOrders() {
 
   liveOrdersListContainer.innerHTML = html || "<p style='text-align: center; width: 100%; margin-top: 20px;'>No live orders found.</p>";
 
-  // Create Lucide icons for header and dropdown arrows
-  // This needs to be called AFTER contentBox.innerHTML has been set
   if (window.lucide) lucide.createIcons();
 
   setupOrderDropdowns(); // Re-attach dropdown listeners
@@ -244,8 +241,6 @@ export function renderLiveOrders() {
 // ✅ Render: Pre Orders (Matching image_06d27b.png Design)
 export function renderPreOrders() {
   const contentBox = document.getElementById('content-box');
-  // Add unique ID for highest specificity in CSS
-  contentBox.id = 'live-pre-order-content-box';
   contentBox.className = 'content-box'; // Keep existing class for general layout
   contentBox.style.display = 'flex';
   contentBox.style.flexDirection = 'column';
@@ -276,7 +271,7 @@ export function renderPreOrders() {
         <span>${order.orderNo}</span>
         <span>${order.price}</span>
         <span class="btn-ready" data-order="${order.orderNo}">
-          Ready
+          Mark as Ready
         </span>
         <span class="dropdown-arrow"><i data-lucide="chevron-down"></i></span> </div>
       <div class="live-order-details" style="display: none;"> ${order.items.join('<br>')}

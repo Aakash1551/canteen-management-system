@@ -40,6 +40,8 @@ export function setupNavigation() {
   document.querySelectorAll(".nav-item").forEach((item) => {
     item.addEventListener("click", () => {
       const page = item.dataset.page;
+      document.getElementById('dashboard').style.display = 'flex';
+
       // 🧹 Remove profile-wrapper if not on Home page
       
 if (page !== "home") {
