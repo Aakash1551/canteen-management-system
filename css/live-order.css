@@ -1,70 +1,176 @@
-.live-orders-container {
+/* Ensure the main content box has scrollability and correct height only for these pages */
+#live-pre-order-content-box {
+    height: calc(100vh - 10vh - 20px); /* Height of main content area minus heading height and some buffer */
+    overflow-y: auto; /* Enable vertical scrolling for the content box itself */
+    padding: 0; /* Remove padding from here */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the content inside it */
+    box-shadow: none; /* Remove shadow here if layout.css adds it, let inner elements cast shadows */
+    background-color: transparent; /* Remove background here, let inner elements manage it */
+}
+
+/* Container for all order cards and header row */
+#live-pre-order-content-box .live-orders-container { /* Highly specific selector */
   width: 100%;
+  max-width: 800px; /* **Crucial: Sets the max width for all cards and header** */
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
-  padding: 10px;
+  gap: 10px; /* Gap between cards */
+  padding: 10px; /* Padding inside this container for visual space around cards */
+  box-sizing: border-box; /* Ensure padding is included in width */
+  /* This container does NOT scroll; its parent (#live-pre-order-content-box) does */
 }
 
+/* Header Row for the entire list (Customer List, Order No., Prizes) */
+#live-pre-order-content-box .live-orders-header-row { /* Highly specific selector */
+  width: 100%; /* Take full width of its parent (.live-orders-container) */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f1f1f1; /* Light gray background for header */
+  padding: 12px 24px;
+  border-radius: 8px; /* Slightly smaller border-radius than cards */
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 5px; /* Space between header and first card */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+  font-family: 'Kanit', sans-serif;
+  box-sizing: border-box; /* Ensure padding is included in width */
+}
+
+/* Space between main page heading and the order list header */
+#live-pre-order-content-box .live-orders-header-row.live-order-page-header { /* Highly specific selector */
+    margin-top: 20px; /* Space between main page heading and this header row */
+}
+
+/* Header icons within the row */
+#live-pre-order-content-box .live-header-icon { /* Highly specific selector */
+    margin-right: 8px; /* Space between icon and text */
+    font-size: 18px; /* Adjust icon size */
+    vertical-align: middle;
+}
+
+/* Adjust span widths within the header row to align with card content */
+#live-pre-order-content-box .live-orders-header-row span { /* Highly specific selector */
+  flex: 1; /* Distribute space evenly initially */
+  text-align: left;
+  white-space: nowrap; /* Prevent wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex; /* Make it a flex container to align icon and text */
+  align-items: center; /* Center icon and text vertically */
+}
+
+/* Adjust widths for alignment with order cards (approximate) */
+#live-pre-order-content-box .live-orders-header-row span:nth-child(1) { flex-basis: 30%; } /* Customer List (with icon) */
+#live-pre-order-content-box .live-orders-header-row span:nth-child(2) { flex-basis: 20%; text-align: left; } /* Order No. (with icon) */
+#live-pre-order-content-box .live-orders-header-row span:nth-child(3) { flex-basis: 20%; text-align: left; } /* Prizes (with icon) */
+#live-pre-order-content-box .live-orders-header-row span:nth-child(4) { flex-basis: 30%; text-align: right; } /* Empty for button/arrow alignment */
+
+
 /* Order Card */
-.live-order-card {
-  width: 100%;
-  max-width: 800px;
+#live-pre-order-content-box .live-order-card { /* Highly specific selector */
+  width: 100%; /* Take full width of its parent (.live-orders-container) */
   background-color: white;
   border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-  padding: 20px 24px;
-  margin: 12px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 15px 24px; /* Padding for the entire card content */
+  margin: 0; /* No external margins, gap handles spacing */
   transition: box-shadow 0.3s ease;
+  opacity: 0; /* for animation */
+  transform: translateY(20px); /* for animation */
+  animation: fadeSlideUp 0.4s ease forwards; /* for animation */
+  font-family: 'Kanit', sans-serif; /* */
+  cursor: pointer; /* Indicate clickability to expand details */
+  box-sizing: border-box; /* Ensure padding is included in width */
 }
 
 .live-order-card:hover {
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .live-order-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   font-weight: 600;
   font-size: 16px;
   color: #333;
-  margin-bottom: 12px;
+  margin-bottom: 0; /* No margin-bottom as details are collapsed */
+  flex-wrap: nowrap; /* Keep items in one line */
+  gap: 15px; /* Space between header elements */
 }
 
-.live-order-items {
+/* Adjust spacing/flex-basis within card header to align with main header */
+.live-order-header span {
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.live-order-header span:nth-child(1) { flex-basis: 30%; } /* Customer Name */
+.live-order-header span:nth-child(2) { flex-basis: 20%; } /* Order No. */
+.live-order-header span:nth-child(3) { flex-basis: 20%; } /* Price */
+.live-order-header span:nth-child(4) { /* This is the button */
+    flex-basis: 30%;
+    text-align: right; /* Text align right for the button */
+    display: flex; /* Flex container for button and arrow */
+    justify-content: flex-end; /* Push button/arrow to the right */
+    align-items: center;
+    gap: 8px; /* Space between button and arrow */
+}
+
+
+.live-order-items { /* This is the specific content for items in details */
   font-size: 15px;
   color: #444;
   line-height: 1.6;
 }
 
+/* Details section that expands/collapses */
 .live-order-details {
-  margin-top: 10px;
-  padding: 10px 15px;
-  background: #f7f7f7;
-  border-radius: 8px;
+  margin-top: 10px; /* Space above details when expanded */
+  padding: 10px 0; /* Padding within the details box */
+  background: transparent; /* No specific background, just part of card */
+  border-top: 1px solid #eee; /* Separator line above details */
   font-size: 14px;
   color: #333;
+  display: none; /* Crucial: Hidden by default, toggled by JS */
 }
 
-/* Item image */
+/* Item image (if applicable in details) */
 .live-order-details img {
   max-width: 100px;
   border-radius: 8px;
   margin-top: 10px;
 }
 
-/* Buttons */
-.live-order-actions {
-  margin-top: 16px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  flex-wrap: wrap;
+/* Buttons - "Ready" / "MARK AS READY" */
+.btn-ready {
+  padding: 4px 10px; /* Smaller padding to make button less big */
+  border-radius: 6px;
+  font-size: 13px; /* Slightly smaller font size */
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+  background-color: #ffc107; /* Yellow color as per image */
+  color: #212529; /* Dark text for contrast */
+  white-space: nowrap; /* Prevents text from wrapping */
+  flex-shrink: 0; /* Prevents button from shrinking */
+}
+.btn-ready:hover {
+  background-color: #e0a800; /* Darker yellow on hover */
+  transform: scale(1.03);
 }
 
-.btn-ready,
+/* Default delivered button style (if used elsewhere) */
 .btn-delivered {
+  background-color: #b7f5c4;
+  color: #212529;
   padding: 8px 16px;
   border-radius: 6px;
   font-size: 14px;
@@ -72,52 +178,35 @@
   border: none;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease;
-  color: #212529;
-}
-
-.btn-ready {
-  background-color: #ffe58f;
-}
-.btn-ready:hover {
-  background-color: #ffd43b;
-  transform: scale(1.03);
-}
-
-.btn-delivered {
-  background-color: #b7f5c4;
 }
 .btn-delivered:hover {
   background-color: #74f29c;
   transform: scale(1.03);
 }
 
-/* ADD to existing .live-order-card */
-.live-order-card {
-  /* ... existing styles ... */
-  font-family: 'Kanit', sans-serif; /* NEW */
-  opacity: 0; /* NEW: for animation */
-  transform: translateY(20px); /* NEW: for animation */
-  animation: fadeSlideUp 0.4s ease forwards; /* NEW */
+/* Dropdown Arrow styling */
+.dropdown-arrow {
+  font-size: 16px; /* Size for Lucide icon */
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  display: inline-block; /* Essential for proper alignment */
+  flex-shrink: 0; /* Prevents arrow from shrinking */
 }
 
-/* ADD new classes */
-.spinner {
-  width: 14px;
-  height: 14px;
-  border: 2px solid #20c997;
-  border-top-color: transparent;
-  border-radius: 50%;
-  display: inline-block;
-  animation: spin 0.6s linear infinite;
-  vertical-align: middle;
-  margin-right: 6px;
+/* Ensure Lucide icon within arrow is styled */
+.dropdown-arrow i {
+    vertical-align: middle; /* Align icon vertically */
 }
 
+.dropdown-arrow.open i { /* Target the icon inside when open */
+  transform: rotate(180deg); /* Rotates icon when details are open */
+}
+
+/* Animations */
 .order-card-exit {
   animation: cardFadeOut 0.5s ease forwards;
 }
 
-/* ADD new animations */
 @keyframes fadeSlideUp {
   to {
     opacity: 1;
@@ -135,24 +224,32 @@
   }
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
+/* Spinner class is completely removed as requested */
 
-/* Responsive */
+/* Responsive adjustments */
 @media (max-width: 600px) {
-  .live-order-card {
-    padding: 16px;
+  #live-pre-order-content-box .live-orders-header-row, /* Highly specific */
+  #live-pre-order-content-box .live-order-header { /* Highly specific */
+    flex-wrap: wrap; /* Allow wrapping */
+    justify-content: flex-start; /* Align items to start when wrapped */
+    gap: 10px; /* Adjust gap for wrapped items */
   }
-
-  .live-order-header {
-    flex-direction: column;
-    gap: 4px;
+  #live-pre-order-content-box .live-orders-header-row span, /* Highly specific */
+  #live-pre-order-content-box .live-order-header span { /* Highly specific */
+      flex-basis: auto; /* Reset flex-basis for wrapping */
+      width: auto;
   }
-
-  .live-order-actions {
-    justify-content: center;
+  #live-pre-order-content-box .live-orders-header-row span:nth-child(4), /* Highly specific */
+  #live-pre-order-content-box .live-order-header span:nth-child(4) { /* Highly specific */
+      width: 100%; /* Make it full width to stack */
+      justify-content: center; /* Center button/arrow on new line */
+      margin-top: 10px; /* Add some margin above it */
+  }
+  .btn-ready {
+      width: auto; /* Allow button to size naturally, or set a max-width */
+      max-width: 150px; /* Example max-width */
+  }
+  #live-pre-order-content-box .live-order-card { /* Highly specific */
+      padding: 12px 15px; /* Smaller padding for mobile cards */
   }
 }

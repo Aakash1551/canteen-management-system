@@ -4,19 +4,21 @@
 }
 
 /* === SIDEBAR (hero) === */
+/* === SIDEBAR (hero) === */
 .hero {
-  width: 20vw;
+  width: 18vw; /* Keep the smaller width from previous step */
   height: 100vh;
   background-color: #1D1241;
-  padding-top: 5%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  padding-top: 70px; /* Keep fixed padding from previous step */
+  display: flex; /* */
+  flex-direction: column; /* */
+  /* REMOVE or ENSURE NOT PRESENT: justify-content: space-between; */
+  align-items: center; /* */
 }
 
 /* === MAIN CONTENT AREA === */
 .main {
-  width: 80vw;
+  width: 82vw;
   height: 100vh;
   background-color: #f1eeee;
   padding: 3% 0 2% 0;

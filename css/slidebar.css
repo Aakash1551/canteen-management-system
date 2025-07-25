@@ -4,7 +4,7 @@
   width: 100%;
   height: 8vh;
   padding: 12%;
-  color: white;
+  color: white; /* Default text color for main sidebar items */
   justify-content: flex-start;
   align-items: center;
   cursor: pointer;
@@ -12,33 +12,33 @@
 
 .box2 {
   width: 100%;
-  height: 50vh;
-  margin-top: 20%;
+  /* Remove height: auto; or height: 50vh; if they were there */
+  /* Remove margin-top: 0; or margin-top: 20%; if they were there */
+  margin-top: auto; /* <-- THIS IS THE KEY CHANGE to push it to the bottom */
   display: flex;
   justify-content: center;
-  align-items: flex-end;
+  align-items: flex-end; /* This aligns its internal content to the bottom (the box itself) */
   color: white;
 }
-
+/* This rule should ONLY apply to the main sidebar .box items (Home, Order, Manage, Contact Us) */
 .box:hover,
 .box:active,
-.box.active,
-.dropdown-item.active {
-  background-color: #E7D7FF;
-  color: black;
+.box.active {
+  background-color: #E7D7FF; /* Light background on hover/active */
+  color: black; /* Dark text on hover/active */
 }
 
+/* Icon filter for main sidebar hover/active */
 .box:hover .icon,
 .box:active .icon,
-.box.active .icon,
-.dropdown-item.active .icon {
-  filter: brightness(0) saturate(100%) invert(0);
+.box.active .icon {
+  filter: brightness(0) saturate(100%) invert(0); /* Turns white icons black */
 }
 
 .text {
   font-size: 20px;
   margin-left: 10%;
-  color: inherit;
+  color: inherit; /* Inherits color from parent (.box or .dropdown-item) */
 }
 
 .icon {
@@ -48,12 +48,12 @@
   display: inline-block;
 }
 
-.icon1 { background-image: url('icons/home-white.svg'); }
-.icon2 { background-image: url('icons/order-white.svg'); }
-.icon3 { background-image: url('icons/manage-white.svg'); }
-.icon4 { background-image: url('icons/contact-white.svg'); }
+.icon1 { background-image: url('../icons/home-white.svg'); }
+.icon2 { background-image: url('../icons/order-white.svg'); }
+.icon3 { background-image: url('../icons/manage-white.svg'); }
+.icon4 { background-image: url('../icons/contact-white.svg'); }
 .icon5 {
-  background-image: url('icons/home-black.svg');
+  background-image: url('../icons/home-black.svg'); /* Corrected path as discussed earlier */
   position: relative;
   margin-left: 70px;
   width: 30px;
@@ -66,31 +66,63 @@
 .dropdown-content {
   display: none;
   flex-direction: column;
-  background-color: #1D1241;
+  background-color: #1D1241; /* Default background for the entire dropdown container */
   width: 100%;
 }
 
-.dropdown-item {
+/* --- REVISED DROPDOWN ITEM STYLES --- */
+/* Target the .dropdown-item inside the .dropdown-content for higher specificity */
+
+/* Default state for dropdown items */
+.dropdown-content .dropdown-item {
   padding: 10px 0;
   width: 100%;
   text-align: center;
   border-bottom: 2px solid #E7D7FF;
-  color: white;
+  background-color: #1D1241; /* <-- Set default background to WHITE */
+  color:white ; /* <-- Set default text color to DARK (matching sidebar's original background) */
   cursor: pointer;
 }
 
-.dropdown-item:hover {
-  background-color: #E7D7FF;
-  color: black;
+/* Hover state for dropdown items */
+.dropdown-content .dropdown-item:hover {
+  background-color: #E7D7FF; /* Light background on hover */
+  color: black; /* Black text on hover */
 }
 
+/* Active state for dropdown items */
+.dropdown-content .dropdown-item.active {
+  background-color: #E7D7FF; /* Light background when active */
+  color: black; /* Black text when active */
+}
+
+/* Icon filter for dropdown items on hover/active */
+.dropdown-content .dropdown-item:hover .icon,
+.dropdown-content .dropdown-item.active .icon {
+  filter: brightness(0) saturate(100%) invert(0); /* Turns white icons black */
+}
+
+/* Arrow color for main sidebar items on hover/active */
+.box:hover .arrow,
+.box:active .arrow,
+.box.active .arrow {
+  border-top-color: black; /* Arrow color for main boxes should be black on hover/active */
+}
+
+/* Arrow color for dropdown items on hover/active */
+.dropdown-content .dropdown-item:hover .arrow,
+.dropdown-content .dropdown-item.active .arrow {
+  border-top-color: black; /* Arrow color for dropdown items should be black on hover/active */
+}
+
+/* Default arrow (defined after more specific ones, so its 'white' will be overridden) */
 .arrow {
   margin-left: auto;
   width: 0;
   height: 0;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
-  border-top: 6px solid white;
+  border-top: 6px solid white; /* Default arrow color (white) */
   transition: transform 0.3s ease;
 }
 
@@ -98,12 +130,7 @@
   transform: rotate(180deg);
 }
 
-.arrow.black,
-.box:hover .arrow,
-.dropdown-item:hover .arrow {
-  border-top-color: white;
-}
-
+/* Profile-related styles (no change here) */
 .profile-wrapper {
   position: absolute;
   top: 50%;
@@ -142,29 +169,14 @@
   display: block;
 }
 
-/* Add these new classes */
+/* Auth background images (no change here) */
 .signup-bg {
-  background-image: url('/icons/signup-bg.png');
+  background-image: url('../icons/signup-bg.png');
 }
 
 .login-bg {
-  background-image: url('/icons/login-bg.png');
+  background-image: url('../icons/login-bg.png');
 }
 
 .auth-bg {
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  height: 100%;
-  width: 100%;
-}
-
-.icon-login::before {
-  content: "🔐";
-  font-size: 18px;
-}
-
-.icon-signup::before {
-  content: "📝";
-  font-size: 18px;
-}
+  background: url()}
