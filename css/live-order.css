@@ -1,147 +1,177 @@
-/* ==== Container ==== */
-.live-orders-container {
-  width: 100%;
+#live-pre-order-content-box {
+  height: calc(100vh - 10vh - 20px);
+  overflow-y: auto;
+  padding: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-  padding: 16px 12px;
-  box-sizing: border-box;
+  box-shadow: none;
+  background-color: transparent;
 }
 
-/* ==== Header Row ==== */
-.live-orders-header-row {
-  width: 100%;
-  max-width: 900px;
+/* Centered page heading */
+.live-order-page-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  background: #e4e4e4;
-  border-radius: 6px;
-  padding: 10px 16px;
+  width: 100%;
+  padding: 15px 20px;
+  margin: 20px auto;
+  background: #f5f5f5;
+  border-radius: 10px;
   font-weight: 600;
-  font-size: 15px;
-  color: #333;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
-/* ==== Header Icons ==== */
+/* Ensure icon spacing */
 .live-header-icon {
-  margin-right: 6px;
-  vertical-align: middle;
+  margin-right: 12px;
+  margin-left: 12px;
 }
 
-/* ==== Card ==== */
+/* Container for all order cards */
+.live-orders-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  padding-bottom: 40px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Individual order card */
 .live-order-card {
   width: 100%;
-  max-width: 900px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  border: 1px solid #e0e0e0;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-  padding: 16px;
+  background: white;
+  border-radius: 2px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 13px 100px;
+  display: flex;
+  flex-direction: column;
   transition: box-shadow 0.3s ease;
-  font-family: 'Kanit', sans-serif;
   opacity: 0;
   transform: translateY(20px);
   animation: fadeSlideUp 0.4s ease forwards;
+  font-family: 'Kanit', sans-serif;
+  cursor: pointer;
+  box-sizing: border-box;
 }
-
 .live-order-card:hover {
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
 }
 
-/* ==== Header Content ==== */
+/* Header inside each card */
 .live-order-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-weight: 600;
-  font-size: 15px;
-  color: #222;
-  margin-bottom: 8px;
+  font-weight: 500;
+  gap: 15px;
+  flex-wrap: nowrap;
 }
-
 .live-order-header span {
   flex: 1;
-  text-align: center;
-}
-
-.live-order-header span:first-child {
   text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-
-.live-order-header span:last-child {
+.live-order-header span:nth-child(1) { flex-basis: 30%; }
+.live-order-header span:nth-child(2) { flex-basis: 20%; }
+.live-order-header span:nth-child(3) { flex-basis: 20%; }
+.live-order-header span:nth-child(4) {
+  flex-basis: 30%;
   text-align: right;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
 }
 
-/* ==== Details (dropdown) ==== */
+/* Order details when expanded */
 .live-order-details {
   margin-top: 10px;
-  padding: 10px 12px;
-  background: #f4f4f4;
-  border-radius: 6px;
-  font-size: 13px;
+  font-size: 14px;
+  color: #333;
+  padding: 10px 0;
+  border-top: 1px solid #eee;
+  background: transparent;
+  display: none;
+}
+.live-order-details img {
+  max-width: 100px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+/* Item list inside details */
+.live-order-items {
+  font-size: 15px;
   color: #444;
+  line-height: 1.6;
 }
 
-/* ==== Ready Button ==== */
-.btn-ready {
-  background-color: #ffe58f;
-  border: none;
-  border-radius: 6px;
-  padding: 6px 12px;
-  font-weight: 600;
-  font-size: 13px;
+/* Dropdown arrow */
+.dropdown-arrow {
+  font-size: 16px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  color: #000;
+  transition: transform 0.3s ease;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.dropdown-arrow i {
+  vertical-align: middle;
+}
+.dropdown-arrow.open i {
+  transform: rotate(180deg);
 }
 
+/* READY button */
+.btn-ready {
+  background-color: #34d399;
+  padding: 6px 1px;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 12px;
+  white-space: nowrap;
+  border: none;
+  flex-shrink: 0;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
 .btn-ready:hover {
-  background-color: #ffd43b;
+  background-color: #059669;
   transform: scale(1.03);
 }
 
-/* ==== Delivered Button ==== */
+/* DELIVERED button */
 .btn-delivered {
   background-color: #b7f5c4;
-  color: #000;
+  color: #212529;
+  padding: 8px 16px;
   border-radius: 6px;
-  padding: 6px 12px;
+  font-size: 14px;
   font-weight: 600;
-  font-size: 13px;
-  cursor: pointer;
   border: none;
-  transition: all 0.2s ease;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
-
 .btn-delivered:hover {
   background-color: #74f29c;
   transform: scale(1.03);
 }
 
-/* ==== Arrow ==== */
-.dropdown-arrow {
-  cursor: pointer;
-  font-size: 14px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
+/* Animations */
+.order-card-exit {
+  animation: cardFadeOut 0.5s ease forwards;
 }
-
-/* ==== Animations ==== */
 @keyframes fadeSlideUp {
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
-
-.order-card-exit {
-  animation: cardFadeOut 0.5s ease forwards;
-}
-
 @keyframes cardFadeOut {
   to {
     opacity: 0;
@@ -152,40 +182,78 @@
   }
 }
 
-/* ==== Spinner (if needed) ==== */
-.spinner {
-  width: 14px;
-  height: 14px;
-  border: 2px solid #20c997;
-  border-top-color: transparent;
-  border-radius: 50%;
-  display: inline-block;
-  animation: spin 0.6s linear infinite;
-  vertical-align: middle;
-  margin-right: 6px;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* ==== Responsive ==== */
+/* Responsive adjustments */
 @media (max-width: 600px) {
   .live-order-header {
-    flex-direction: column;
-    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 10px;
   }
-
   .live-order-header span {
+    flex-basis: auto;
+    width: auto;
+  }
+  .live-order-header span:nth-child(4) {
     width: 100%;
-    text-align: left;
+    justify-content: center;
+    margin-top: 10px;
   }
+  .btn-ready {
+    width: auto;
+    max-width: 150px;
+  }
+  .live-order-card {
+    padding: 12px 15px;
+  }
+}
 
-  .live-orders-header-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-  }
+/* Table wrapper for live/pre UI */
+.live-orders-table-wrapper {
+  width: 100%;
+  max-width: 900px;
+  height: 80vh;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Fixed Header Row */
+.live-orders-header-row {
+  display: flex;
+  background: #f3f4f6;
+  font-weight: bold;
+  padding: 12px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  border-bottom: 1px solid #ccc;
+}
+.live-orders-header-row > div {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Expandable section */
+.live-order-details {
+  padding: 10px 0 0 0;
+  font-size: 13px;
+  color: #444;
+}
+
+/* Button overrides */
+.btn-ready {
+  background-color: #22c55e;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.btn-ready:hover {
+  background-color: #16a34a;
 }

@@ -30,7 +30,7 @@
 
 /* === CONTENT BOX === */
 .content-box {
-  height: calc(100vh - 10vh - 20px);
+  height: calc(100vh - 10vh - 40px);
   overflow-y: auto;
   width: 90%;
   background-color: white;

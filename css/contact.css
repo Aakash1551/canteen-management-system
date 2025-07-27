@@ -1,72 +1,74 @@
-/* === CONTACT PAGE === */
+/* === MODERN CONTACT PAGE === */
 
 .contact-card {
   text-align: center;
-  font-family: 'Segoe UI', sans-serif;
-  padding: 40px 20px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  padding: 3rem 1.5rem;
   background-color: transparent;
+  animation: fadeInAnimation 0.6s ease-out;
 }
 
 .contact-title {
-  font-size: 34px;
+  font-size: clamp(2rem, 4vw, 2.25rem);
   font-weight: 700;
-  margin-bottom: 12px;
+  margin-bottom: 0.75rem;
   color: #1D1241;
   letter-spacing: 0.5px;
 }
 
 .contact-subtext {
-  font-size: 18px;
-  color: #666;
-  margin-bottom: 30px;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+  font-size: 1.125rem;
+  color: #555;
+  margin: 0 auto 2rem;
+  max-width: 640px;
+  line-height: 1.6;
 }
 
 .contact-info-box {
   display: inline-block;
   text-align: left;
-  font-size: 17px;
+  font-size: 1rem;
   line-height: 1.7;
-  color: #333;
+  color: #222;
   background: #fff;
-  padding: 24px 32px;
-  border-radius: 12px;
+  padding: 1.75rem 2.25rem;
+  border-radius: 1rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
   max-width: 480px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  will-change: transform, box-shadow;
 }
 
 .contact-info-box:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+  transform: translateY(-6px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
 }
 
 .contact-info-box p {
-  margin: 12px 0;
-  font-size: 16px;
+  margin: 0.75rem 0;
+  font-size: 1rem;
 }
 
 .label {
   font-weight: 600;
+  display: block;
+  margin-bottom: 4px;
+  color: #444;
 }
 
 .label.phone {
-  color: #d63384;
+  color: #D63384;
 }
-
 .label.email {
-  color: #6f42c1;
+  color: #6F42C1;
 }
-
 .label.address {
-  color: #e83e8c;
+  color: #E83E8C;
 }
 
 .contact-note {
-  margin-top: 30px;
-  font-size: 16px;
+  margin-top: 2rem;
+  font-size: 1rem;
   color: #777;
   font-style: italic;
   max-width: 480px;
@@ -74,12 +76,12 @@
   margin-right: auto;
 }
 
-/* ADD new classes */
+/* Upload Picture Area */
 .profile-form {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-top: 20px;
+  margin-top: 1.5rem;
 }
 
 .profile-pic-wrapper {
@@ -98,22 +100,34 @@
 }
 
 #profile-pic-upload {
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 /* Responsive */
 @media (max-width: 600px) {
   .contact-info-box {
-    padding: 20px;
+    padding: 1.25rem;
     width: 100%;
     margin: 0 10px;
   }
 
   .contact-title {
-    font-size: 28px;
+    font-size: 1.75rem;
   }
 
   .contact-subtext {
-    font-size: 16px;
+    font-size: 1rem;
+  }
+}
+
+/* === Reusable Animation Utilities (if not already defined globally) === */
+@keyframes fadeInAnimation {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

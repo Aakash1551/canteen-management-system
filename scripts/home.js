@@ -17,15 +17,14 @@ const tips = [
 ];
 const tip = tips[Math.floor(Math.random() * tips.length)];
 
+
 export function renderHome() {
   document.body.classList.add("home-page");
   document.body.classList.remove("other-page");
 
-  // ✅ Clean up old profile wrapper if exists
   const previousWrapper = document.querySelector(".profile-wrapper");
   if (previousWrapper) previousWrapper.remove();
 
-  // ✅ Re-insert profile
   const headingBox = document.querySelector(".heading-box");
   const profileWrapper = document.createElement("div");
   profileWrapper.className = "profile-wrapper";
@@ -38,7 +37,7 @@ export function renderHome() {
   `;
   if (headingBox) headingBox.appendChild(profileWrapper);
 
-  // ✅ Dropdown toggle
+  // Toggle dropdown
   const profilePic = document.getElementById("top-profile-pic");
   const dropdown = document.getElementById("profile-dropdown");
 
@@ -47,19 +46,20 @@ export function renderHome() {
     dropdown.classList.toggle("show");
   });
 
+  // Close dropdown if clicked outside
   document.addEventListener("click", (e) => {
     if (!dropdown.contains(e.target) && !profilePic.contains(e.target)) {
       dropdown.classList.remove("show");
     }
   });
 
-  // ✅ Logout button
+  // Logout button
   document.getElementById("logout-btn").addEventListener("click", () => {
     localStorage.removeItem("isLoggedIn");
     location.reload();
   });
 
-  // ✅ View profile logic
+  // View profile logic
   document.getElementById("view-profile").addEventListener("click", () => {
     dropdown.classList.remove("show");
 
@@ -124,23 +124,20 @@ export function renderHome() {
       }
 
       localStorage.setItem("profileData", JSON.stringify({ name, email, role }));
+
       showToast("✅ Profile updated successfully!");
       modalRoot.innerHTML = "";
     });
   });
 
-  // ✅ Render dashboard cards
-  const contentBox = document.getElementById("content-box");
-  if (!contentBox) {
-    console.error("❌ #content-box missing. Cannot render dashboard.");
-    return;
-  }
-
-  contentBox.className = "content-box dashboard-view";
-  contentBox.removeAttribute("style");
-
+  // 🔥 DASHBOARD CONTENT
   const availableItems = menuItems.filter((item) => item.available).length;
   const unavailableItems = menuItems.filter((item) => !item.available).length;
+
+ const contentBox = document.getElementById("content-box");
+if (!contentBox) return;
+  contentBox.className = "content-box dashboard-view";
+  contentBox.removeAttribute("style");
 
   contentBox.innerHTML = `
     <div class="dashboard-welcome">
@@ -154,11 +151,10 @@ export function renderHome() {
       <div class="dashboard-card red"><h3>Pre-Order History</h3><p>${preOrderHistory.length}</p></div>
       <div class="dashboard-card blue"><h3>Available Menu Items</h3><p>${availableItems}</p></div>
       <div class="dashboard-card orange"><h3>Unavailable Items</h3><p>${unavailableItems}</p></div>
-      <div class="dashboard-tip">🍽️ <strong>Tip of the Day:</strong> "${tip}"</div>
+      <div class="dashboard-tip">🍽 <strong>Tip of the Day:</strong> "${tip}"</div>
     </div>
   `;
 
-  // ✅ Add click navigation to cards
   document.querySelectorAll(".dashboard-card").forEach((card) => {
     const title = card.querySelector("h3")?.textContent?.toLowerCase();
     let targetPage = null;

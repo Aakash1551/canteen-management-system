@@ -20,6 +20,7 @@ export let preOrderHistory = loadOrderList('preOrderHistory');
 
 // ✅ One-time Dummy Data Generator (if localStorage is empty)
 if (!localStorage.getItem('preOrders') || !localStorage.getItem('liveOrders')) {
+  console.log("🧪 Adding dummy orders now");
   const randomTime = () => {
     const hour = Math.floor(Math.random() * 12) + 1;
     const minute = Math.floor(Math.random() * 60);
@@ -176,52 +177,55 @@ function setupDeliveredFromDelivery() {
         deliveryOrders.splice(index, 1);        // ❌ Remove from delivery
         persistOrders();                        // 💾 Save
         renderDeliveryManagement();             // 🔄 Refresh UI
-        console.log(`✅ Order ${orderNo} marked as delivered`);
+        showToast(`✅ Order ${orderNo} marked as delivered`);
       }
     });
   });
 }
 
 
-// ✅ Render: Live Orders (Matching Screenshot 2025-07-18 235447.png Design)
 export function renderLiveOrders() {
-  const contentBox = document.getElementById('content-box');
-  // Add unique ID for highest specificity in CSS
-  // contentBox.id = 'live-pre-order-content-box';
-  contentBox.className = 'content-box'; // Keep existing class for general layout
+  const contentBox = document.getElementById("content-box");
+  if (!contentBox) return;
+
+  contentBox.className = 'content-box';
   contentBox.style.display = 'flex';
   contentBox.style.flexDirection = 'column';
   contentBox.style.alignItems = 'center';
-  // Let CSS handle height and padding for this ID for ultimate control
   contentBox.style.height = '';
   contentBox.style.padding = '';
 
-  // Header row for the order list, as seen in Screenshot 2025-07-18 235447.png
   contentBox.innerHTML = `
-    <div class="live-orders-header-row live-order-page-header">
-      <i data-lucide="users" class="live-header-icon"></i><span>Customer List</span>
-      <i data-lucide="clipboard-list" class="live-header-icon"></i><span>Order No.</span>
-      <i data-lucide="dollar-sign" class="live-header-icon"></i><span>Prizes</span>
-      <span></span> </div>
-    <div class="live-orders-container" id="liveOrdersList"></div>
+    <div class="live-orders-table-wrapper">
+      <div class="live-orders-header-row">
+        <div><i data-lucide="users"></i><span>Customer</span></div>
+        <div><i data-lucide="clipboard-list"></i><span>Order No.</span></div>
+        <div><i data-lucide="dollar-sign"></i><span>Price</span></div>
+        <div><span>Action</span></div>
+      </div>
+      <div class="live-orders-container" id="liveOrdersList"></div>
+    </div>
   `;
 
   const liveOrdersListContainer = document.getElementById('liveOrdersList');
 
-  // Sort by order number ascending by default for consistency with image
-  const sortedLiveOrders = [...liveOrders].sort((a, b) => parseInt(a.orderNo.replace('#', '')) - parseInt(b.orderNo.replace('#', '')));
+  const sortedLiveOrders = [...liveOrders].sort(
+    (a, b) => parseInt(a.orderNo.replace('#', '')) - parseInt(b.orderNo.replace('#', ''))
+  );
 
   const html = sortedLiveOrders.map(order => `
     <div class="live-order-card" data-order-no="${order.orderNo}">
       <div class="live-order-header">
-        <span>${order.name}</span>
-        <span>${order.orderNo}</span>
-        <span>${order.price}</span>
-        <span class="btn-ready" data-order="${order.orderNo}">
-          MARK AS READY
-        </span>
-        <span class="dropdown-arrow"><i data-lucide="chevron-down"></i></span> </div>
-      <div class="live-order-details" style="display: none;"> ${order.items.join('<br>')}
+        <div>${order.name}</div>
+        <div>${order.orderNo}</div>
+        <div>${order.price}</div>
+        <div class="action-cell">
+          <span class="btn-ready" data-order="${order.orderNo}">MARK AS READY</span>
+          <span class="dropdown-arrow"><i data-lucide="chevron-down"></i></span>
+        </div>
+      </div>
+      <div class="live-order-details" style="display: none;">
+        ${order.items.join('<br>')}
         <div style="margin-top: 5px; font-size: 12px; color: #666;">
           Placed at: ${order.placedAt}
         </div>
@@ -233,14 +237,18 @@ export function renderLiveOrders() {
 
   if (window.lucide) lucide.createIcons();
 
-  setupOrderDropdowns(); // Re-attach dropdown listeners
-  setupReadyButtons('live'); // Re-attach ready button listeners
+  setupOrderDropdowns();
+  setupReadyButtons('live');
 }
+
 
 
 // ✅ Render: Pre Orders (Matching image_06d27b.png Design)
 export function renderPreOrders() {
-  const contentBox = document.getElementById('content-box');
+const contentBox = document.getElementById("content-box");
+if (!contentBox) return;
+  
+
   contentBox.className = 'content-box'; // Keep existing class for general layout
   contentBox.style.display = 'flex';
   contentBox.style.flexDirection = 'column';
@@ -250,14 +258,18 @@ export function renderPreOrders() {
   contentBox.style.padding = '';
 
   // Header row for the order list, as seen in image_06d27b.png
-  contentBox.innerHTML = `
-    <div class="live-orders-header-row live-order-page-header">
-      <i data-lucide="users" class="live-header-icon"></i><span>Customer List</span>
-      <i data-lucide="clipboard-list" class="live-header-icon"></i><span>Order No.</span>
-      <i data-lucide="dollar-sign" class="live-header-icon"></i><span>Prizes</span>
-      <span></span> </div>
+ contentBox.innerHTML = `
+  <div class="live-orders-table-wrapper">
+    <div class="live-orders-header-row">
+      <div><i data-lucide="users"></i><span>Customer</span></div>
+      <div><i data-lucide="clipboard-list"></i><span>Order No.</span></div>
+      <div><i data-lucide="dollar-sign"></i><span>Price</span></div>
+      <div><span>Action</span></div>
+    </div>
     <div class="live-orders-container" id="preOrdersList"></div>
-  `;
+  </div>
+`;
+
 
   const preOrdersListContainer = document.getElementById('preOrdersList');
 
@@ -265,23 +277,26 @@ export function renderPreOrders() {
   const sortedPreOrders = [...preOrders].sort((a, b) => parseInt(a.orderNo.replace('#', '')) - parseInt(b.orderNo.replace('#', '')));
 
   const html = sortedPreOrders.map(order => `
-    <div class="live-order-card" data-order-no="${order.orderNo}">
-      <div class="live-order-header">
-        <span>${order.name}</span>
-        <span>${order.orderNo}</span>
-        <span>${order.price}</span>
-        <span class="btn-ready" data-order="${order.orderNo}">
-          Mark as Ready
-        </span>
-        <span class="dropdown-arrow"><i data-lucide="chevron-down"></i></span> </div>
-      <div class="live-order-details" style="display: none;"> ${order.items.join('<br>')}
-        <div style="margin-top: 5px; font-size: 12px; color: #666;">
-          Placed at: ${order.placedAt}<br>
-          Delivery window: ${order.deliveryWindow}
-        </div>
+  <div class="live-order-card" data-order-no="${order.orderNo}">
+    <div class="live-order-header">
+      <div>${order.name}</div>
+      <div>${order.orderNo}</div>
+      <div>${order.price}</div>
+      <div class="action-cell">
+        <span class="btn-ready" data-order="${order.orderNo}">MARK AS READY</span>
+        <span class="dropdown-arrow"><i data-lucide="chevron-down"></i></span>
       </div>
     </div>
-  `).join('');
+    <div class="live-order-details" style="display: none;">
+      ${order.items.join('<br>')}
+      <div style="margin-top: 5px; font-size: 12px; color: #666;">
+        Placed at: ${order.placedAt}<br>
+        Delivery window: ${order.deliveryWindow}
+      </div>
+    </div>
+  </div>
+`).join('');
+
 
   preOrdersListContainer.innerHTML = html || "<p style='text-align: center; width: 100%; margin-top: 20px;'>No pre-orders found.</p>";
 

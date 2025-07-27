@@ -1,33 +1,42 @@
+/* === Modern Animation Utilities === */
 
-  /* === ANIMATIONS === */
-  .fade-in {
+:where(.fade-in) {
+  opacity: 0;
+  animation: fadeInAnimation 0.6s ease-out forwards;
+  will-change: opacity, transform;
+}
+
+@keyframes fadeInAnimation {
+  from {
     opacity: 0;
-    animation: fadeInAnimation 0.8s ease-out forwards;
+    transform: translateY(16px);
   }
-
-  @keyframes fadeInAnimation {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
 
-  .hover-lift {
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+:where(.hover-lift) {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  will-change: transform, box-shadow;
+}
+:where(.hover-lift:hover) {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Delayed Fade-in Options */
+:where(.fade-in.delay-1) { animation-delay: 0.1s; }
+:where(.fade-in.delay-2) { animation-delay: 0.2s; }
+:where(.fade-in.delay-3) { animation-delay: 0.3s; }
+:where(.fade-in.delay-4) { animation-delay: 0.4s; }
+:where(.fade-in.delay-5) { animation-delay: 0.5s; }
+
+/* Optional: Motion-safe for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in, .hover-lift {
+    animation: none !important;
+    transition: none !important;
   }
-
-  .hover-lift:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-  }
-
-  .fade-in.delay-1 { animation-delay: 0.1s; }
-  .fade-in.delay-2 { animation-delay: 0.2s; }
-  .fade-in.delay-3 { animation-delay: 0.3s; }
-  .fade-in.delay-4 { animation-delay: 0.4s; }
-  .fade-in.delay-5 { animation-delay: 0.5s; }
-
+}
