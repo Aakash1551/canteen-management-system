@@ -7,13 +7,28 @@ export function openAddMenuModal() {
   setupModalEvents(modal, null);
 }
 
-export function openEditMenuModal(index) {
+export async function openEditMenuModal(itemId) {
   removeExistingModal();
-  const items = JSON.parse(localStorage.getItem('menuItems')) || [];
-  const item = items[index];
+
+  const token = localStorage.getItem('authToken');
+  let item = null;
+
+  try {
+    const res = await fetch(`http://192.168.213.174:8000/api/menu/${itemId}/`, {
+      headers: {
+        Authorization: `Token ${token}`
+      }
+    });
+    if (!res.ok) throw new Error('Failed to fetch item');
+    item = await res.json();
+  } catch (err) {
+    alert("Failed to load item");
+    return;
+  }
+
   const modal = createModalHTML(item);
   document.getElementById('modal-root').appendChild(modal);
-  setupModalEvents(modal, index);
+  setupModalEvents(modal, itemId);
 }
 
 function removeExistingModal() {
@@ -30,22 +45,21 @@ function createModalHTML(data = {}) {
       <div class="modal-content-styled">
         <div class="modal-left">
           <label class="image-upload-box">
-            + upload image
+            ${data.image ? `<img src="${data.image}" alt="Item" style="max-width:100%; border-radius:6px;">` : '+ upload image'}
             <input type="file" name="menuImage" style="display:none">
           </label>
-          <input type="number" name="menuTime" placeholder="Time (Min.)" value="${data.time || ''}" class="input-styled">
-          <input type="number" name="menuPrice" placeholder="Price" value="${(data.price || '').replace('Rs.', '')}" class="input-styled">
+          <input type="number" name="menuTime" placeholder="Time (Min.)" value="${data.prep_time || ''}" class="input-styled">
+          <input type="number" name="menuPrice" placeholder="Price" value="${data.price || ''}" class="input-styled">
         </div>
         <div class="modal-right">
           <input type="text" name="menuName" placeholder="Name" value="${data.name || ''}" class="input-styled">
           <textarea name="menuDesc" placeholder="Description" class="textarea-styled">${data.description || ''}</textarea>
           <div class="category-group">
-  <label><input type="radio" name="category" value="Starter" ${data.category === 'Starter' ? 'checked' : ''}> Starter</label>
-  <label><input type="radio" name="category" value="Main Course" ${data.category === 'Main Course' ? 'checked' : ''}> Main Course</label>
-  <label><input type="radio" name="category" value="Juice" ${data.category === 'Juice' ? 'checked' : ''}> Juice</label>
-</div>
-<input type="text" name="customCategory" placeholder="Or enter custom section (e.g. Chinese, Ice Cream)" class="input-styled" value="${data.category && !['Starter','Main Course','Juice'].includes(data.category) ? data.category : ''}">
-
+            <label><input type="radio" name="category" value="Starter" ${data.category === 'Starter' ? 'checked' : ''}> Starter</label>
+            <label><input type="radio" name="category" value="Main Course" ${data.category === 'Main Course' ? 'checked' : ''}> Main Course</label>
+            <label><input type="radio" name="category" value="Juice" ${data.category === 'Juice' ? 'checked' : ''}> Juice</label>
+          </div>
+          <input type="text" name="customCategory" placeholder="Or enter custom section" class="input-styled" value="${data.category && !['Starter','Main Course','Juice'].includes(data.category) ? data.category : ''}">
         </div>
       </div>
       <button class="modal-save-styled">Save</button>
@@ -54,43 +68,66 @@ function createModalHTML(data = {}) {
   return div;
 }
 
-function setupModalEvents(modal, editIndex) {
-  let imageData = null; // To hold uploaded image data
+function setupModalEvents(modal, itemId) {
+  let imageFile = null;
 
   modal.querySelector('.modal-close-styled').addEventListener('click', () => modal.remove());
 
-  modal.querySelector('.modal-save-styled').addEventListener('click', () => {
+  modal.querySelector('.modal-save-styled').addEventListener('click', async () => {
     const item = readModalForm(modal);
-    if (item) {
-      if (imageData) {
-        item.image = imageData;
-      } else if (editIndex !== null) {
-        const items = JSON.parse(localStorage.getItem('menuItems')) || [];
-        item.image = items[editIndex]?.image || null; // retain existing image if no new upload
-      } else {
-        item.image = null;
+    if (!item) return;
+
+    const formData = new FormData();
+    formData.append('name', item.name);
+    formData.append('description', item.description);
+    formData.append('price', item.price);
+    formData.append('category', item.category);
+    formData.append('prep_time', item.time || 0);
+    formData.append('available', true);
+    formData.append('stock_count', 20);
+    if (imageFile) {
+      formData.append('image', imageFile);
+    }
+
+    const token = localStorage.getItem('authToken');
+    const url = itemId
+      ? `http://192.168.213.174:8000/api/menu/update/${itemId}/`
+      : `http://192.168.213.174:8000/api/menu/add/`;
+
+    const method = itemId ? 'PATCH' : 'POST';
+
+    try {
+      const res = await fetch(url, {
+        method,
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        alert("Error: " + JSON.stringify(err));
+        return;
       }
 
-      let items = JSON.parse(localStorage.getItem('menuItems')) || [];
-      if (editIndex === null) {
-        items.push({ ...item, available: true });
-      } else {
-        items[editIndex] = { ...items[editIndex], ...item };
-      }
-      localStorage.setItem('menuItems', JSON.stringify(items));
       modal.remove();
       renderMenuManagement();
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong");
     }
   });
 
   modal.querySelector('[name="menuImage"]').addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (file) {
+      imageFile = file;
       const reader = new FileReader();
-      reader.onload = function(evt) {
-        imageData = evt.target.result; // save base64
+      reader.onload = function (evt) {
+        const preview = evt.target.result;
         modal.querySelector('.image-upload-box').innerHTML = `
-          <img src="${imageData}" alt="Uploaded" style="max-width:100%; border-radius:6px;">
+          <img src="${preview}" alt="Uploaded" style="max-width:100%; border-radius:6px;">
         `;
       };
       reader.readAsDataURL(file);
@@ -113,10 +150,9 @@ function readModalForm(modal) {
 
   return {
     name,
-    price: "Rs." + price,
+    price,
     description: desc,
     time,
     category: customCat || selectedCat
   };
 }
-

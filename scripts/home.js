@@ -4,7 +4,6 @@ import {
   historyOrders,
   preOrderHistory,
 } from "./orders.js";
-
 import { menuItems } from "./menu.js";
 import { showToast } from './popup.js';
 
@@ -16,7 +15,6 @@ const tips = [
   "Label everything in storage — reduces waste."
 ];
 const tip = tips[Math.floor(Math.random() * tips.length)];
-
 
 export function renderHome() {
   document.body.classList.add("home-page");
@@ -37,7 +35,6 @@ export function renderHome() {
   `;
   if (headingBox) headingBox.appendChild(profileWrapper);
 
-  // Toggle dropdown
   const profilePic = document.getElementById("top-profile-pic");
   const dropdown = document.getElementById("profile-dropdown");
 
@@ -46,96 +43,144 @@ export function renderHome() {
     dropdown.classList.toggle("show");
   });
 
-  // Close dropdown if clicked outside
   document.addEventListener("click", (e) => {
     if (!dropdown.contains(e.target) && !profilePic.contains(e.target)) {
       dropdown.classList.remove("show");
     }
   });
 
-  // Logout button
-  document.getElementById("logout-btn").addEventListener("click", () => {
-    localStorage.removeItem("isLoggedIn");
-    location.reload();
+  // ✅ LOGOUT HANDLER
+  document.getElementById("logout-btn").addEventListener("click", async () => {
+    const token = localStorage.getItem("authtoken");
+
+    if (!token) {
+      showToast("⚠ You're already logged out", "warning");
+      return;
+    }
+
+    try {
+      const res = await fetch("http://192.168.213.174:8000/api/auth/logout/", {
+        method: "POST",
+        headers: {
+          "Authorization": `Token ${token}`,
+          "Content-Type": "application/json"
+        },
+      });
+
+      if (res.ok) {
+        localStorage.removeItem("isLoggedIn");
+        localStorage.removeItem("authtoken");
+        location.reload();
+      } else {
+        const data = await res.json();
+        console.error("Logout failed:", data);
+        showToast("❌ Logout failed", "error");
+      }
+    } catch (err) {
+      console.error("Logout error:", err);
+      showToast("❌ Logout error", "error");
+    }
   });
 
-  // View profile logic
-  document.getElementById("view-profile").addEventListener("click", () => {
+  // ✅ PROFILE VIEW + UPDATE
+  document.getElementById("view-profile").addEventListener("click", async () => {
     dropdown.classList.remove("show");
+    const token = localStorage.getItem("authtoken");
+    if (!token) return;
 
-    const storedProfile = JSON.parse(localStorage.getItem("profileData")) || {};
-    const nameValue = storedProfile.name || "Chetan Jain";
-    const emailValue = storedProfile.email || "chef@example.com";
-    const roleValue = storedProfile.role || "Kitchen Admin";
+    try {
+      const res = await fetch("http://192.168.213.174:8000/user/profile/", {
+        headers: { Authorization: `Token ${token}` },
+      });
+      const data = await res.json();
 
-    const modalRoot = document.getElementById("modal-root");
-    modalRoot.innerHTML = `
-      <div class="modal-overlay">
-        <div class="profile-modal">
-          <button class="modal-close-styled">×</button>
-          <h2 class="modal-title">My Profile</h2>
+      const modalRoot = document.getElementById("modal-root");
+      modalRoot.innerHTML = `
+        <div class="modal-overlay">
+          <div class="profile-modal">
+            <button class="modal-close-styled">×</button>
+            <h2 class="modal-title">My Profile</h2>
 
-          <div class="profile-pic-section">
-            <img src="assets/canteen.webp" alt="Profile Picture" class="profile-pic-preview" id="profile-pic-preview"/>
-            <input type="file" id="profile-pic-input" accept="image/*" />
-          </div>
+            <div class="profile-pic-section">
+              <img src="${data.profile_picture || 'assets/canteen.webp'}" alt="Profile Picture" class="profile-pic-preview" id="profile-pic-preview"/>
+              <input type="file" id="profile-pic-input" accept="image/*" />
+            </div>
 
-          <div class="profile-form">
-            <label>Name:</label>
-            <input type="text" id="profile-name" value="${nameValue}" />
+            <div class="profile-form">
+              <label>Name:</label>
+              <input type="text" id="profile-name" value="${data.name || ''}" />
 
-            <label>Email:</label>
-            <input type="email" id="profile-email" value="${emailValue}" />
+              <label>Email:</label>
+              <input type="email" id="profile-email" value="${data.email || ''}" disabled />
 
-            <label>Role:</label>
-            <input type="text" id="profile-role" value="${roleValue}" />
+              <label>Phone:</label>
+              <input type="text" id="profile-phone" value="${data.phone_number || ''}" />
 
-            <button class="profile-save-btn" id="save-profile-btn">Save</button>
+              <label>DOB:</label>
+              <input type="date" id="profile-dob" value="${data.dob || ''}" />
+
+              <button class="profile-save-btn" id="save-profile-btn">Save</button>
+            </div>
           </div>
         </div>
-      </div>
-    `;
+      `;
 
-    modalRoot.querySelector(".modal-close-styled").addEventListener("click", () => {
-      modalRoot.innerHTML = "";
-    });
-
-    modalRoot.querySelector(".modal-overlay").addEventListener("click", (e) => {
-      if (e.target.classList.contains("modal-overlay")) {
+      modalRoot.querySelector(".modal-close-styled").addEventListener("click", () => {
         modalRoot.innerHTML = "";
-      }
-    });
+      });
 
-    document.getElementById("profile-pic-input").addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        document.getElementById("profile-pic-preview").src = URL.createObjectURL(file);
-      }
-    });
+      modalRoot.querySelector(".modal-overlay").addEventListener("click", (e) => {
+        if (e.target.classList.contains("modal-overlay")) {
+          modalRoot.innerHTML = "";
+        }
+      });
 
-    document.getElementById("save-profile-btn").addEventListener("click", () => {
-      const name = document.getElementById("profile-name").value.trim();
-      const email = document.getElementById("profile-email").value.trim();
-      const role = document.getElementById("profile-role").value.trim();
+      document.getElementById("profile-pic-input").addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          document.getElementById("profile-pic-preview").src = URL.createObjectURL(file);
+        }
+      });
 
-      if (!name || !email || !role) {
-        alert("Please fill in all fields.");
-        return;
-      }
+      document.getElementById("save-profile-btn").addEventListener("click", async () => {
+        const name = document.getElementById("profile-name").value.trim();
+        const phone = document.getElementById("profile-phone").value.trim();
+        const dob = document.getElementById("profile-dob").value;
+        const file = document.getElementById("profile-pic-input").files[0];
 
-      localStorage.setItem("profileData", JSON.stringify({ name, email, role }));
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("phone_number", phone);
+        formData.append("dob", dob);
+        if (file) formData.append("profile_picture", file);
 
-      showToast("✅ Profile updated successfully!");
-      modalRoot.innerHTML = "";
-    });
+        try {
+          const res = await fetch("http://192.168.213.174:8000/user/profile/update/", {
+            method: "PUT",
+            headers: { Authorization: `Token ${token}` },
+            body: formData,
+          });
+
+          if (!res.ok) throw new Error("Update failed");
+          showToast("✅ Profile updated successfully!");
+          modalRoot.innerHTML = "";
+        } catch (err) {
+          console.error("Update failed:", err);
+          showToast("❌ Failed to update profile", "error");
+        }
+      });
+    } catch (err) {
+      console.error("Failed to load profile", err);
+      showToast("❌ Unable to load profile", "error");
+    }
   });
 
-  // 🔥 DASHBOARD CONTENT
+  // 📊 DASHBOARD
   const availableItems = menuItems.filter((item) => item.available).length;
   const unavailableItems = menuItems.filter((item) => !item.available).length;
 
- const contentBox = document.getElementById("content-box");
-if (!contentBox) return;
+  const contentBox = document.getElementById("content-box");
+  if (!contentBox) return;
   contentBox.className = "content-box dashboard-view";
   contentBox.removeAttribute("style");
 
