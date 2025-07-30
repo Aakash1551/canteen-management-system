@@ -126,7 +126,9 @@ export function renderLoginPage() {
   if (window.lucide) lucide.createIcons();
 
   const passwordInput = document.getElementById("login-password");
+  const emailInput = document.getElementById("login-email");
   const eyeToggle = document.querySelector(".eye-toggle");
+  const loginBtn = document.getElementById("login-btn");
 
   if (passwordInput && eyeToggle) {
     eyeToggle.addEventListener("click", () => {
@@ -137,9 +139,18 @@ export function renderLoginPage() {
     });
   }
 
-  document.getElementById("login-btn").addEventListener("click", async () => {
-    const email = document.getElementById("login-email").value.trim();
-    const password = document.getElementById("login-password").value;
+  // 🔑 Press Enter triggers login
+  [emailInput, passwordInput].forEach((input) => {
+    input.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        loginBtn.click();
+      }
+    });
+  });
+
+  loginBtn.addEventListener("click", async () => {
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
 
     if (!email || !password) {
       showToast("Please fill in all fields.", "error");
@@ -156,17 +167,21 @@ export function renderLoginPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        const msg =
+        let msg =
           data?.message ||
           data?.detail ||
           data?.non_field_errors?.[0] ||
           (typeof data === "object" ? Object.values(data)[0]?.[0] : null) ||
           "Login failed";
 
-        if (msg.toLowerCase().includes("not a canteen owner")) {
+        msg = msg.toLowerCase();
+
+        if (msg.includes("not a canteen owner")) {
           showToast("Only canteen owners can log in.", "error");
+        } else if (msg.includes("invalid") || msg.includes("not found")) {
+          showToast("Invalid email or password.", "error");
         } else {
-          showToast(msg, "error");
+          showToast(msg.charAt(0).toUpperCase() + msg.slice(1), "error");
         }
         return;
       }

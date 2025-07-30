@@ -119,40 +119,39 @@ function renderMenuCards(searchTerm) {
     });
   });
 
-document.querySelectorAll('.availability-btn').forEach(btn => {
-  btn.addEventListener('click', async e => {
-    e.stopPropagation();
-    const id = btn.dataset.id;
-    const item = menuItems.find(m => m.id == id);
-    if (!item) return;
+  // ✅ AVAILABILITY TOGGLE — FULL OBJECT WITH PUT
+  document.querySelectorAll('.availability-btn').forEach(btn => {
+    btn.addEventListener('click', async e => {
+      e.stopPropagation();
+      const id = btn.dataset.id;
+      const item = menuItems.find(m => m.id == id);
+      if (!item) return;
 
-    try {
-      await fetch(`http://192.168.213.174:8000/api/menu/update/${id}/`, {
-        method: 'PUT',
-        headers: {
-          ...getAuthHeaders(),
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: item.name,
-          description: item.description,
-          price: item.price,
-          category: item.category,
-          prep_time: item.prep_time,
-          available: !item.available,
-          stock_count: item.stock_count,
-          image: item.image || null
-        }),
-      });
+      try {
+        await fetch(`http://192.168.213.174:8000/api/menu/update/${id}/`, {
+          method: 'PUT',
+          headers: {
+            ...getAuthHeaders(),
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: item.name,
+            description: item.description,
+            price: item.price,
+            category: item.category,
+            prep_time: item.prep_time,
+            available: !item.available,
+            stock_count: item.stock_count
+          }),
+        });
 
-      await loadMenuItems();
-      renderMenuCards(document.getElementById('menuSearch').value.toLowerCase());
-    } catch (err) {
-      console.error('Error updating availability', err);
-    }
+        await loadMenuItems();
+        renderMenuCards(document.getElementById('menuSearch').value.toLowerCase());
+      } catch (err) {
+        console.error('Error updating availability', err);
+      }
+    });
   });
-});
-
 
   document.querySelectorAll('.delete-btn').forEach(btn => {
     btn.addEventListener('click', e => {

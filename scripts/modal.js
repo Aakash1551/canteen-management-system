@@ -94,7 +94,7 @@ function setupModalEvents(modal, itemId) {
       ? `http://192.168.213.174:8000/api/menu/update/${itemId}/`
       : `http://192.168.213.174:8000/api/menu/add/`;
 
-    const method = itemId ? 'PATCH' : 'POST';
+    const method = itemId ? 'PUT' : 'POST'; // ✅ FIXED PATCH → PUT
 
     try {
       const res = await fetch(url, {

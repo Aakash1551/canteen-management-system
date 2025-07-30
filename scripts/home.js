@@ -28,12 +28,30 @@ export function renderHome() {
   profileWrapper.className = "profile-wrapper";
   profileWrapper.innerHTML = `
     <img id="top-profile-pic" class="top-profile-pic" src="assets/canteen.webp" alt="Profile" />
-    <div id="profile-dropdown" class="profile-dropdown">
+    <div class="profile-dropdown" id="profile-dropdown">
       <div class="dropdown-item" id="view-profile">View Profile</div>
       <div class="dropdown-item" id="logout-btn">Logout</div>
     </div>
   `;
   if (headingBox) headingBox.appendChild(profileWrapper);
+
+  // ✅ Fetch latest profile pic from backend
+  const token = localStorage.getItem("authToken");
+  if (token) {
+    fetch("http://192.168.213.174:8000/api/user/profile/", {
+      headers: { Authorization: `Token ${token}` },
+    })
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data?.profile_picture) {
+          const topProfilePic = document.getElementById("top-profile-pic");
+          if (topProfilePic) topProfilePic.src = data.profile_picture;
+        }
+      })
+      .catch(err => {
+        console.warn("Failed to load profile pic:", err);
+      });
+  }
 
   const profilePic = document.getElementById("top-profile-pic");
   const dropdown = document.getElementById("profile-dropdown");
@@ -51,8 +69,6 @@ export function renderHome() {
 
   // ✅ LOGOUT HANDLER
   document.getElementById("logout-btn").addEventListener("click", async () => {
-    const token = localStorage.getItem("authtoken");
-
     if (!token) {
       showToast("⚠ You're already logged out", "warning");
       return;
@@ -62,14 +78,13 @@ export function renderHome() {
       const res = await fetch("http://192.168.213.174:8000/api/auth/logout/", {
         method: "POST",
         headers: {
-          "Authorization": `Token ${token}`,
-          "Content-Type": "application/json"
-        },
+          "Authorization": `Token ${token}`
+        }
       });
 
       if (res.ok) {
+        localStorage.removeItem("authToken");
         localStorage.removeItem("isLoggedIn");
-        localStorage.removeItem("authtoken");
         location.reload();
       } else {
         const data = await res.json();
@@ -85,13 +100,18 @@ export function renderHome() {
   // ✅ PROFILE VIEW + UPDATE
   document.getElementById("view-profile").addEventListener("click", async () => {
     dropdown.classList.remove("show");
-    const token = localStorage.getItem("authtoken");
-    if (!token) return;
+
+    if (!token) {
+      showToast("⚠ You are not logged in", "warning");
+      return;
+    }
 
     try {
-      const res = await fetch("http://192.168.213.174:8000/user/profile/", {
+      const res = await fetch("http://192.168.213.174:8000/api/user/profile/", {
         headers: { Authorization: `Token ${token}` },
       });
+
+      if (!res.ok) throw new Error("Profile fetch failed");
       const data = await res.json();
 
       const modalRoot = document.getElementById("modal-root");
@@ -103,7 +123,7 @@ export function renderHome() {
 
             <div class="profile-pic-section">
               <img src="${data.profile_picture || 'assets/canteen.webp'}" alt="Profile Picture" class="profile-pic-preview" id="profile-pic-preview"/>
-              <input type="file" id="profile-pic-input" accept="image/*" />
+              <input type="file" id="profile-pic-input" accept="image/*" style="display:none;" />
             </div>
 
             <div class="profile-form">
@@ -125,16 +145,22 @@ export function renderHome() {
         </div>
       `;
 
+      // 🔁 Close modal events
       modalRoot.querySelector(".modal-close-styled").addEventListener("click", () => {
         modalRoot.innerHTML = "";
       });
-
       modalRoot.querySelector(".modal-overlay").addEventListener("click", (e) => {
         if (e.target.classList.contains("modal-overlay")) {
           modalRoot.innerHTML = "";
         }
       });
 
+      // ✅ Preview image click = open file input
+      document.getElementById("profile-pic-preview").addEventListener("click", () => {
+        document.getElementById("profile-pic-input").click();
+      });
+
+      // 🔍 Show selected image
       document.getElementById("profile-pic-input").addEventListener("change", (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -142,6 +168,7 @@ export function renderHome() {
         }
       });
 
+      // 💾 Save profile
       document.getElementById("save-profile-btn").addEventListener("click", async () => {
         const name = document.getElementById("profile-name").value.trim();
         const phone = document.getElementById("profile-phone").value.trim();
@@ -155,22 +182,32 @@ export function renderHome() {
         if (file) formData.append("profile_picture", file);
 
         try {
-          const res = await fetch("http://192.168.213.174:8000/user/profile/update/", {
+          const res = await fetch("http://192.168.213.174:8000/api/user/profile/update/", {
             method: "PUT",
-            headers: { Authorization: `Token ${token}` },
+            headers: {
+              Authorization: `Token ${token}`,
+            },
             body: formData,
           });
 
           if (!res.ok) throw new Error("Update failed");
+
+          // ✅ Update top profile pic immediately
+          if (file) {
+            const updatedUrl = URL.createObjectURL(file);
+            const topProfilePic = document.getElementById("top-profile-pic");
+            if (topProfilePic) topProfilePic.src = updatedUrl;
+          }
+
           showToast("✅ Profile updated successfully!");
           modalRoot.innerHTML = "";
         } catch (err) {
-          console.error("Update failed:", err);
+          console.error("Profile update failed:", err);
           showToast("❌ Failed to update profile", "error");
         }
       });
     } catch (err) {
-      console.error("Failed to load profile", err);
+      console.error("Profile load failed:", err);
       showToast("❌ Unable to load profile", "error");
     }
   });
